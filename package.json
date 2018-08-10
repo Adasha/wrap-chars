@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
   "main": "./src/WrapChars.js",
   "directories": {
@@ -43,5 +43,5 @@
     "class"
   ],
   "author": "Adam Shailer",
-  "license": "ISC"
+  "license": "LGPL-3.0"
 }
