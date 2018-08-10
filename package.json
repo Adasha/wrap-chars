@@ -1,7 +1,7 @@
 {
   "name": "wrap-chars",
   "version": "1.0.0",
-  "description": "Individually wrap characters in a chosen element, with optional class.",
+  "description": "Individually wrap characters in a chosen element, with an optional class.",
   "main": "./src/WrapChars.js",
   "directories": {
     "test": "tests"

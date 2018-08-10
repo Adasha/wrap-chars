@@ -8,5 +8,5 @@ This is alpha. The plan is to make it behave politely.
 ## Use
 
 ```javascript
-WrapChars.wrap(elementRef, 'letter'|'word', 'span', 'classname');
+WrapChars.wrap(Element:elementRef, 'letter'|'word', String:elementName, String:className);
 ```
