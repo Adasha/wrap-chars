@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>wrap-chars</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Eater" rel="stylesheet">
+
+    <style>
+
+        blockquote
+        {
+            font: 160% 'Eater', cursive;
+            text-rendering: optimizeSpeed;
+            width: -webkit-max-content;
+            width: -moz-max-content;
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2em;
+            color: #000;
+            background: #eee;
+            overflow-wrap: break-word;
+            white-space: normal;
+            word-wrap: normal;
+        }
+
+	</style>
+
+</head>
+
+<body>
+
+	<blockquote cite="Lewis Carroll">
+		<span class="line">’Twas brillig, and the slithy toves</span><br>
+		<span class="line">Did gyre and gimble in the wabe:</span><br>
+		<span class="line">All mimsy were the borogoves,</span><br>
+		<span class="line">And the mome raths outgrabe.</span>
+	</blockquote>
+
+
+	<script src="../src/WrapChars.js"></script>
+	<script>
+
+		let lines = document.querySelectorAll('*.line');
+		lines.forEach(line => WrapChars.wrap(line, 'letter', 'span', 'testclass'));
+
+	</script>
+
+</body>
+</html>

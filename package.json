@@ -1,0 +1,45 @@
+{
+  "name": "wrap-chars",
+  "version": "1.0.0",
+  "description": "Individually wrap characters in a chosen element, with optional class.",
+  "main": "./src/WrapChars.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "text",
+    "characters",
+    "character",
+    "char",
+    "symbol",
+    "words",
+    "word",
+    "inline",
+    "in-line",
+    "strings",
+    "string",
+    "elements",
+    "element",
+    "tag",
+    "tags",
+    "html",
+    "markup",
+    "mark-up",
+    "split",
+    "divide",
+    "separate",
+    "wrap",
+    "isolate",
+    "space",
+    "spacing",
+    "spacer",
+    "delimit",
+    "delimiter",
+    "class"
+  ],
+  "author": "Adam Shailer",
+  "license": "ISC"
+}
