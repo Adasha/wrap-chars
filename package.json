@@ -3,16 +3,17 @@
   "version": "1.0.2",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
   "author": {
-      "name": "Adam Shailer",
-      "email": "adasha76@outlook.com",
-      "url": "http://adasha.com"
+    "name": "Adam Shailer",
+    "email": "adasha76@outlook.com",
+    "url": "http://adasha.com"
   },
-  "browser": "./src/WrapChars.js",
-  "unpkg": "./src/WrapChars.js",
+  "browser": "./dist/WrapChars.js",
+  "unpkg": "./dist/WrapChars.min.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
+    "build": "gulp babel && gulp minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -50,12 +51,20 @@
   ],
   "homepage": "http://lab.adasha.com/",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/Adasha/wrap-chars"
+    "type": "git",
+    "url": "https://github.com/Adasha/wrap-chars"
   },
   "bugs": {
-      "url": "https://github.com/Adasha/wrap-chars/issues",
-      "email": "adasha76@outlook.com"
+    "url": "https://github.com/Adasha/wrap-chars/issues",
+    "email": "adasha76@outlook.com"
   },
-  "license": "LGPL-3.0"
+  "license": "LGPL-3.0",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1"
+  }
 }
