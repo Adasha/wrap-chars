@@ -1,8 +1,14 @@
 {
   "name": "wrap-chars",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
-  "main": "./src/WrapChars.js",
+  "author": {
+      "name": "Adam Shailer",
+      "email": "adasha76@outlook.com",
+      "url": "http://adasha.com"
+  },
+  "browser": "./src/WrapChars.js",
+  "unpkg": "./src/WrapChars.js",
   "directories": {
     "test": "tests"
   },
@@ -42,6 +48,14 @@
     "delimiter",
     "class"
   ],
-  "author": "Adam Shailer",
+  "homepage": "http://lab.adasha.com/",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/Adasha/wrap-chars"
+  },
+  "bugs": {
+      "url": "https://github.com/Adasha/wrap-chars/issues",
+      "email": "adasha76@outlook.com"
+  },
   "license": "LGPL-3.0"
 }
