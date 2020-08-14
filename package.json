@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
@@ -49,7 +49,7 @@
     "delimiter",
     "class"
   ],
-  "homepage": "http://lab.adasha.com/",
+  "homepage": "http://lab.adasha.com/wrap-chars",
   "repository": {
     "type": "git",
     "url": "https://github.com/Adasha/wrap-chars"
@@ -60,11 +60,12 @@
   },
   "license": "LGPL-3.0",
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "gulp": "^3.9.1",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "gulp": "^4.0.2",
     "gulp-babel": "^7.0.1",
     "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.2"
   }
 }
