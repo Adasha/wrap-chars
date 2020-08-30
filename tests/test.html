@@ -32,18 +32,20 @@
 <body>
 
 	<blockquote cite="Lewis Carroll">
-		<span class="line">’Twas brillig, and the slithy toves</span><br>
+		<span class="line">’Twas <a href="#"><em>brillig</em></a>, and the slithy toves</span><br>
 		<span class="line">Did gyre and gimble in the wabe:</span><br>
 		<span class="line">All mimsy were the borogoves,</span><br>
 		<span class="line">And the mome raths outgrabe.</span>
 	</blockquote>
 
 
-	<script src="../src/WrapChars.js"></script>
+	<script src="../dist/WrapChars.js"></script>
 	<script>
-
-		let lines = document.querySelectorAll('*.line');
-		lines.forEach(line => WrapChars.wrap(line, 'letter', 'span', 'testclass'));
+		let lines = document.querySelectorAll('blockquote');
+		lines.forEach(line => {
+            // console.log(line);
+            WrapChars.wrap(line, {type: 'letter', tagName: 'span', className: 'testclass'})
+        });
 
 	</script>
 
