@@ -19,7 +19,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
+ * WrapChars Class
  * @class WrapChars
+ * @version 2.0.2
+ * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
 var WrapChars = /*#__PURE__*/function () {
@@ -32,8 +35,14 @@ var WrapChars = /*#__PURE__*/function () {
 
     /**
      * 
-     * @param {Element} element 
-     * @param {Object} params 
+     * @static
+     * @method wrap
+     * @param {Element} element - A reference to a DOM element.
+     * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
+     * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
+     * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
+     * @param {string} [params.className] - An optional class name to add to each element.
+     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&ensp;".
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
