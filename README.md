@@ -7,7 +7,7 @@ Version 1 of this was very blunt in its approach, stripping out any nested eleme
 
 The syntax has also changed almost completely, but should now allow for more graceful changes in the future.
 
-[Demo](http://adasha.com/lab/wrap-chars.html)
+[Demo](http://adasha.com/lab/wrap-chars/index.html)
 
 
 ## Setup
