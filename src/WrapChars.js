@@ -22,7 +22,6 @@ class WrapChars
 
 
 
-
         function _parseNode(node)
         {
             let n, w;
@@ -30,21 +29,25 @@ class WrapChars
             {
                 case 1 : //element
                     n = node.childNodes;
-                    for(let i=0; i<n.length; i++)
+                    for(let i=n.length; i>0; i--)
                     {
                         // console.log(node);
-                        _parseNode(n[i]);
+                        _parseNode(n[i-1]);
                     }
                     break;
                 case 3 : //text
+                    if (!node.textContent.replace(/\s/g, '').length)
+                    {
+                        //node only contains whitespace
+                        break;
+                    }
                     // node.parentNode.innerHTML = _wrap(node.textContent);
                     n = document.createElement('span');
                     w = _wrap(node.textContent);
                     
                     n.innerHTML = w;
                     // console.log(n.childNodes);
-                    // node.parentNode.replaceChild(n.childNodes, node);
-                    node.replaceWith(n);
+                    node.replaceWith(...n.childNodes);
                     break;
                 default:
                     //unsupported node type
