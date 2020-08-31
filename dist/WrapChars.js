@@ -19,9 +19,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
- * Known issues:
- * - replacing node contents doesn't work. workaround leaves extraneous HTML
- * - whitespace in html gets added as nodes
+ * @class WrapChars
 */
 // eslint-disable-next-line no-unused-vars
 var WrapChars = /*#__PURE__*/function () {
@@ -31,6 +29,12 @@ var WrapChars = /*#__PURE__*/function () {
 
   _createClass(WrapChars, null, [{
     key: "wrap",
+
+    /**
+     * 
+     * @param {Element} element 
+     * @param {Object} params 
+     */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var type = params.type || 'letter',

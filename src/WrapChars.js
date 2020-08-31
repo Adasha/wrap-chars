@@ -1,5 +1,8 @@
 /**
+ * WrapChars Class
  * @class WrapChars
+ * @version 2.0.2
+ * @author Adam Shailer <adasha76@outlook.com>
 */
 
 // eslint-disable-next-line no-unused-vars
@@ -9,8 +12,14 @@ class WrapChars
 
     /**
      * 
-     * @param {Element} element 
-     * @param {Object} params 
+     * @static
+     * @method wrap
+     * @param {Element} element - A reference to a DOM element.
+     * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
+     * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
+     * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
+     * @param {string} [params.className] - An optional class name to add to each element.
+     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&ensp;".
      */
     static wrap(element, params = {})
     {
