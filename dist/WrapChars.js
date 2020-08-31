@@ -36,7 +36,7 @@ var WrapChars = /*#__PURE__*/function () {
       var type = params.type || 'letter',
           tagName = params.tagName || 'span',
           className = params.className,
-          spaceChar = params.spaceChar || '&ensp;';
+          spaceChar = params.spaceChar;
 
       _parseNode(element);
 
@@ -81,7 +81,7 @@ var WrapChars = /*#__PURE__*/function () {
             rslt = '';
 
         for (var _char = 0; _char < chars.length; _char++) {
-          var letter = chars[_char] === ' ' ? spaceChar : chars[_char];
+          var letter = chars[_char] === ' ' && spaceChar ? spaceChar : chars[_char];
           var str = '';
           str += "<".concat(tagName);
           if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");

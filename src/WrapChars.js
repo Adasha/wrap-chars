@@ -15,7 +15,7 @@ class WrapChars
         let type = params.type || 'letter',
             tagName = params.tagName || 'span',
             className = params.className,
-            spaceChar = params.spaceChar || '&ensp;';
+            spaceChar = params.spaceChar;
 
 
             _parseNode(element);
@@ -65,7 +65,7 @@ class WrapChars
 
             for(let char=0; char<chars.length; char++)
             {
-                let letter = chars[char]===' ' ? spaceChar : chars[char];
+                let letter = (chars[char]===' ' && spaceChar) ? spaceChar : chars[char];
                 let str = '';
 
                 str += `<${tagName}`;

@@ -20,9 +20,9 @@
             padding: 2em;
             color: #000;
             background: #eee;
-            overflow-wrap: break-word;
             white-space: normal;
-            word-wrap: normal;
+            overflow-wrap: anywhere;
+            word-break: break-all;
         }
 
 	</style>
@@ -41,10 +41,14 @@
 
 	<script src="../dist/WrapChars.js"></script>
 	<script>
-		let lines = document.querySelectorAll('blockquote');
+		let lines = document.querySelectorAll('*.line');
 		lines.forEach(line => {
-            // console.log(line);
-            WrapChars.wrap(line, {type: 'letter', tagName: 'span', className: 'testclass'})
+            WrapChars.wrap(line, {
+                type: 'letter',
+                tagName: 'span',
+                className: 'testclass',
+                spaceChar: '&ensp;'
+            })
         });
 
 	</script>
