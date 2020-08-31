@@ -1,7 +1,5 @@
 /**
- * Known issues:
- * - replacing node contents doesn't work. workaround leaves extraneous HTML
- * - whitespace in html gets added as nodes
+ * @class WrapChars
 */
 
 // eslint-disable-next-line no-unused-vars
@@ -9,7 +7,11 @@ class WrapChars
 {
 
 
-
+    /**
+     * 
+     * @param {Element} element 
+     * @param {Object} params 
+     */
     static wrap(element, params = {})
     {
         let type = params.type || 'letter',
