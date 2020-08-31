@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.0.0a",
+  "version": "2.0.0",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
