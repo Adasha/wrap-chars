@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.0.2
+ * @version 2.1.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -42,19 +42,26 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
-     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&ensp;".
+     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
+     * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var type = params.type || 'letter',
           tagName = params.tagName || 'span',
           className = params.className,
-          spaceChar = params.spaceChar;
+          spaceChar = params.spaceChar,
+          deep = params.deep || true;
 
       _parseNode(element);
+      /**
+       * 
+       * @param {HTMLElement} node - The node to process.
+       */
+
 
       function _parseNode(node) {
-        var n, w;
+        var n;
 
         switch (node.nodeType) {
           case 1:
@@ -62,24 +69,24 @@ var WrapChars = /*#__PURE__*/function () {
             n = node.childNodes;
 
             for (var i = n.length; i > 0; i--) {
-              // console.log(node);
-              _parseNode(n[i - 1]);
+              // console.log(n[i-1].nodeType);
+              // if(n[i-1].nodeType===1 && deep)
+              // {
+              _parseNode(n[i - 1]); // }
+
             }
 
             break;
 
           case 3:
             //text
-            if (!node.textContent.replace(/\s/g, '').length) {
+            if (!node.textContent.replace(/\s/g, "").length) {
               //node only contains whitespace
               break;
-            } // node.parentNode.innerHTML = _wrap(node.textContent);
+            }
 
-
-            n = document.createElement('span');
-            w = _wrap(node.textContent);
-            n.innerHTML = w; // console.log(n.childNodes);
-
+            n = document.createElement("span");
+            n.innerHTML = _wrap(node.textContent);
             node.replaceWith.apply(node, _toConsumableArray(n.childNodes));
             break;
 
@@ -87,15 +94,27 @@ var WrapChars = /*#__PURE__*/function () {
 
         }
       }
+      /**
+       * 
+       * @param {string} text - The text to wrap.
+       * @returns {string} The processed HTML string.
+       */
+
 
       function _wrap(text) {
-        var delimiter = type === 'word' ? ' ' : '',
+        var delimiter = type === "word" ? " " : "",
             chars = text.split(delimiter),
-            rslt = '';
+            rslt = "";
+
+        if (type === "word") {
+          for (var i = chars.length; i > 1; i--) {
+            chars.splice(i - 1, 0, " ");
+          }
+        }
 
         for (var _char = 0; _char < chars.length; _char++) {
-          var letter = chars[_char] === ' ' && spaceChar ? spaceChar : chars[_char];
-          var str = '';
+          var letter = chars[_char] === " " && spaceChar ? spaceChar : chars[_char];
+          var str = "";
           str += "<".concat(tagName);
           if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");
           str += ">" + letter + "</".concat(tagName, ">");

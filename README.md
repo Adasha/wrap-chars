@@ -3,11 +3,12 @@
 ## About
 Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
 
-Version 1 of this was very blunt in its approach, stripping out any nested elements entirely. This version is much more polite, and will do its best to preserve any existing markup.
+Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup.
 
 The syntax has also changed almost completely, but should now allow for more graceful changes in the future.
 
 [Homepage/Demos](http://lab.adasha.com/wrap-chars/index.html)
+
 
 
 ## Setup
@@ -20,7 +21,10 @@ Import it into your HTML:
 ```HTML
 <script src="WrapChars.min.js"></script>
 ```
+
+
 Ensure the DOM has loaded completely before continuing.
+
 
 
 ## Use
@@ -40,21 +44,22 @@ Say we have the following HTML:
 Grab a reference to the element you want to affect:
 
 ```javascript
-let domElement = document.getElementById('poem');
+let domElement = document.getElementById ('poem');
 ```
+
 
 To wrap the characters using the default settings, call the `WrapChars.wrap()` static method using the reference as the argument:
 
 ```javascript
-WrapChars.wrap(domElement);
+WrapChars.wrap (domElement);
 ```
 
 
 You could also iterate over a NodeList if you prefer:
 
 ```javascript
-let lines = document.querySelectorAll('*.lines');
-lines.forEach(line => WrapChars.wrap(line));
+let lines = document.querySelectorAll ('*.lines');
+lines.forEach (line => WrapChars.wrap (line));
 ```
 
 
@@ -75,16 +80,22 @@ Any text nodes containing only whitespace will be ignored.
 
 The `params` object can contain the following properties, all optional:
 
-- `type` - Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `letter`. `word` is a bit buggy ATM.
+- `type` - Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `'letter'`.
 - `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
 - `className` - The class name that can be applied to each wrapped element. Default is *none*.
-- `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `&ensp;`. Default is *none*.
+- `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
+- `deep` - [PLANNED] A Boolean value for whether to also wrap text nodes within nested elements. Default is `true`.
 
 
 
 ## Known issues
 
-- Using type `word` strips out spaces.
-- `word` type also doesn't deal with punctuation as preferred.
+- `word` type doesn't deal with punctuation as preferred.
 - Completely interferes with text wrapping.
+
+
+
+## Planned improvements
+
+- `params.deep` property to allow/prevent nested elements from being affected.
 
