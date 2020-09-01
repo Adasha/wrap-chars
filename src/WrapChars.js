@@ -1,7 +1,7 @@
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.1.0
+ * @version 2.0.2
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -23,8 +23,8 @@ class WrapChars
      */
     static wrap(element, params = {})
     {
-        let type = params.type || 'letter',
-            tagName = params.tagName || 'span',
+        let type = params.type || "letter",
+            tagName = params.tagName || "span",
             className = params.className,
             spaceChar = params.spaceChar,
             deep = params.deep || true;

@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.1.0
+ * @version 2.0.2
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -47,8 +47,8 @@ var WrapChars = /*#__PURE__*/function () {
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var type = params.type || 'letter',
-          tagName = params.tagName || 'span',
+      var type = params.type || "letter",
+          tagName = params.tagName || "span",
           className = params.className,
           spaceChar = params.spaceChar,
           deep = params.deep || true;
@@ -104,7 +104,7 @@ var WrapChars = /*#__PURE__*/function () {
       function _wrap(text) {
         var delimiter = type === "word" ? " " : "",
             chars = text.split(delimiter),
-            rslt = "";
+            rslt = ""; //restore spaces if split type = 'word'
 
         if (type === "word") {
           for (var i = chars.length; i > 1; i--) {

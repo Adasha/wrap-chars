@@ -29,6 +29,10 @@ Ensure the DOM has loaded completely before continuing.
 
 ## Use
 
+```javascript
+WrapChars.wrap(elementReference, [paramsObject]);
+```
+
 Say we have the following HTML:
 
 ```HTML
@@ -84,18 +88,39 @@ The `params` object can contain the following properties, all optional:
 - `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
 - `className` - The class name that can be applied to each wrapped element. Default is *none*.
 - `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
-- `deep` - [PLANNED] A Boolean value for whether to also wrap text nodes within nested elements. Default is `true`.
+
+##### Example:
+
+```javascript
+WrapChars.wrap(myElement, {
+    type: "word",
+    tagName: "div",
+    className: "wrapped_content",
+    spaceChar: "&nbsp;"
+});
+```
 
 
 
 ## Known issues
 
-- `word` type doesn't deal with punctuation as preferred.
-- Completely interferes with text wrapping.
+- `word` type doesn't deal with punctuation
+- interferes with browser's text wrapping behaviour
+- no option to not wrap node's entire sub-tree
 
 
 
 ## Planned improvements
 
 - `params.deep` property to allow/prevent nested elements from being affected.
+
+
+
+## Version history
+
+v2.0.2 - Fixed split by word removed spaces
+v2.0.1 - Fixed broken URL in README.md
+v2.0.0 - Near complete rewrite to play nicer with other people's markup
+v1.0.x - Original version
+
 
