@@ -118,7 +118,7 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.0.2 - Fixed split by word removed spaces
+- v2.0.2 - Fixed splitting by word removes spaces
 - v2.0.1 - Fixed broken URL in README.md
 - v2.0.0 - Near complete rewrite to play nicer with other people's markup
 - v1.0.x - Original version
