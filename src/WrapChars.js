@@ -1,7 +1,7 @@
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.0.2
+ * @version 2.0.3
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -20,6 +20,7 @@ class WrapChars
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+     * @param {boolean} [params.skipPrewrapped] - Whether to pass on characters that have been pre-wrapped.
      */
     static wrap(element, params = {})
     {
@@ -27,7 +28,8 @@ class WrapChars
             tagName = params.tagName || "span",
             className = params.className,
             spaceChar = params.spaceChar,
-            deep = params.deep || true;
+            deep = params.deep || true,
+            skipPre = params.skipPrewrapped || false;
 
 
         _parseNode(element);
@@ -39,14 +41,14 @@ class WrapChars
          */
         function _parseNode(node)
         {
-            let n;
+            console.log(node.childNodes.length);
+            let n, t;
             switch(node.nodeType)
             {
                 case 1 : //element
                     n = node.childNodes;
                     for(let i=n.length; i>0; i--)
                     {
-                        // console.log(n[i-1].nodeType);
                         // if(n[i-1].nodeType===1 && deep)
                         // {
                             _parseNode(n[i-1]);
@@ -54,14 +56,15 @@ class WrapChars
                     }
                     break;
                 case 3 : //text
-                    if(!node.textContent.replace(/\s/g, "").length)
+                    t = node.textContent.trimStart().trimEnd();
+                    if(!t.replace(/\s/g, "").length)
                     {
                         //node only contains whitespace
                         break;
                     }
 
                     n = document.createElement("span");
-                    n.innerHTML = _wrap(node.textContent);
+                    n.innerHTML = _wrap(t);
                     node.replaceWith(...n.childNodes);
 
                     break;

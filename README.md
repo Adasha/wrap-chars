@@ -7,7 +7,7 @@ Version 1 of this was very blunt in its approach, stripping out any nested tags 
 
 The syntax has also changed almost completely, but should now allow for more graceful changes in the future.
 
-[Homepage/Demos](http://lab.adasha.com/wrap-chars/index.html)
+[Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
 
 
@@ -24,6 +24,7 @@ Import it into your HTML:
 
 
 Ensure the DOM has loaded completely before continuing.
+
 
 
 
@@ -69,7 +70,7 @@ lines.forEach (line => WrapChars.wrap (line));
 
 Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
 
-Any text nodes containing only whitespace will be ignored.
+Any leading/trailing whitespace is removed. Text nodes containing only whitespace will be ignored completely.
 
 
 ### Configuration
@@ -88,6 +89,8 @@ The `params` object can contain the following properties, all optional:
 - `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
 - `className` - The class name that can be applied to each wrapped element. Default is *none*.
 - `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
+
+
 
 ##### Example:
 
@@ -118,8 +121,8 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
+- v2.0.3 - Added remove leading/trailing whitespace
 - v2.0.2 - Fixed splitting by word removes spaces
-- v2.0.1 - Fixed broken URL in README.md
 - v2.0.0 - Near complete rewrite to play nicer with other people's markup
 - v1.0.x - Original version
 

@@ -5,14 +5,14 @@ var rename = require("gulp-rename");
 
 
 gulp.task('babel', function() {
-    return gulp.src('src/*.js')
+    return gulp.src('./src/*.js')
     .pipe(babel())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('minify', function() {
-    return gulp.src('dist/WrapChars.js')
+    return gulp.src('./dist/WrapChars.js')
     .pipe(rename({extname: '.min.js'}))
     .pipe(uglify())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('./dist'))
 });

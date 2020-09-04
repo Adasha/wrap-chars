@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="test">
+        TEST TEXT.
+    </div>
+
+	<script src="../dist/WrapChars.js"></script>
+	<script>
+		let el = document.getElementById('test');
+        WrapChars.wrap(el, {
+            type: 'letter',
+            tagName: 'span',
+            className: 'testclass',
+            //spaceChar: '&ensp;',
+            deep: true
+        });
+
+	</script>
+</body>
+</html>

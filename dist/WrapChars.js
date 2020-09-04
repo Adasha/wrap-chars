@@ -44,6 +44,7 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+     * @param {boolean} [params.skipPrewrapped] - Whether to pass on characters that have been pre-wrapped.
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -51,7 +52,8 @@ var WrapChars = /*#__PURE__*/function () {
           tagName = params.tagName || "span",
           className = params.className,
           spaceChar = params.spaceChar,
-          deep = params.deep || true;
+          deep = params.deep || true,
+          skipPre = params.skipPrewrapped || false;
 
       _parseNode(element);
       /**
@@ -61,7 +63,8 @@ var WrapChars = /*#__PURE__*/function () {
 
 
       function _parseNode(node) {
-        var n;
+        console.log(node.childNodes.length);
+        var n, t;
 
         switch (node.nodeType) {
           case 1:
@@ -69,7 +72,6 @@ var WrapChars = /*#__PURE__*/function () {
             n = node.childNodes;
 
             for (var i = n.length; i > 0; i--) {
-              // console.log(n[i-1].nodeType);
               // if(n[i-1].nodeType===1 && deep)
               // {
               _parseNode(n[i - 1]); // }
@@ -80,13 +82,15 @@ var WrapChars = /*#__PURE__*/function () {
 
           case 3:
             //text
-            if (!node.textContent.replace(/\s/g, "").length) {
+            t = node.textContent.trimStart().trimEnd();
+
+            if (!t.replace(/\s/g, "").length) {
               //node only contains whitespace
               break;
             }
 
             n = document.createElement("span");
-            n.innerHTML = _wrap(node.textContent);
+            n.innerHTML = _wrap(t);
             node.replaceWith.apply(node, _toConsumableArray(n.childNodes));
             break;
 
