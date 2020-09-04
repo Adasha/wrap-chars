@@ -70,7 +70,7 @@ lines.forEach (line => WrapChars.wrap (line));
 
 Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
 
-Any leading/trailing whitespace is removed. Text nodes containing only whitespace will be ignored completely.
+Any leading/trailing whitespace from each text node is removed. Text nodes containing only whitespace are ignored completely.
 
 
 ### Configuration
