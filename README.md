@@ -2,12 +2,12 @@
 
 ## Contents
 
-[About](#about)
-[Setup](#setup)
-[Use](#use)
-[Known issues](#known-issues)
-[Planned improvements](#planned-improvements)
-[Version history](#version-history)
+- [About](#about)
+- [Setup](#setup)
+- [Use](#use)
+- [Known issues](#known-issues)
+- [Planned improvements](#planned-improvements)
+- [Version history](#version-history)
 
 
 ## About
