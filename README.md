@@ -1,5 +1,15 @@
 # WrapChars.js
 
+## Contents
+
+[About](#about)
+[Setup](#setup)
+[Use](#use)
+[Known issues](#known-issues)
+[Planned improvements](#planned-improvements)
+[Version history](#version-history)
+
+
 ## About
 Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
 
@@ -116,6 +126,7 @@ WrapChars.wrap(myElement, {
 ## Planned improvements
 
 - `params.deep` property to allow/prevent nested elements from being affected.
+- `dontwrap` property to specify a class name to indicate passing on the element. 
 
 
 
