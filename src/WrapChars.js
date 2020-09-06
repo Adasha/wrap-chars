@@ -42,7 +42,6 @@ class WrapChars
          */
         function _parseNode(node)
         {
-            console.log(node.childNodes.length);
             let n, t;
             switch(node.nodeType)
             {
