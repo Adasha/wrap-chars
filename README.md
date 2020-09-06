@@ -76,8 +76,10 @@ Any whitespace is reduced down to a single space. Text nodes containing only whi
 
 `WrapChars.wrap()` accepts two arguments:
 
-- `element` - a reference to a DOM element, e.g. as obtained via `querySelector()` or `getElementById()`.
-- `params` - (optional) an object containing key/value pairs to configure the method (see below).
+| Argument | Type | Description |
+| --- | --- | --- |
+| `element` | HTMLElement | A reference to a DOM element, e.g. as obtained via `querySelector()` or `getElementById()`. |
+| `params` | Object | (optional) An object containing key/value pairs to configure the method (see below). |
 
 #### `params` object
 
