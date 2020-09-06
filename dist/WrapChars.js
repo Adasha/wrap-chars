@@ -53,7 +53,7 @@ var WrapChars = /*#__PURE__*/function () {
           tagName = params.tagName || "span",
           className = params.className,
           spaceChar = params.spaceChar,
-          deep = params.deep || true,
+          deep = params.hasOwnProperty("deep") ? params.deep : true,
           skipClass = params.skipClass;
 
       _parseNode(element);
@@ -64,36 +64,37 @@ var WrapChars = /*#__PURE__*/function () {
 
 
       function _parseNode(node) {
-        console.log(node.childNodes.length);
         var n, t;
 
         switch (node.nodeType) {
           case 1:
             //element
-            n = node.childNodes;
-
+            // console.log(node + ': ' + node.children.length +' / '+ node.childNodes.length);
             if (skipClass && typeof skipClass === "string" && node.classList.contains(skipClass)) {
               break;
             }
 
-            for (var i = n.length; i > 0; i--) {
-              // if(n[i-1].nodeType===1 && deep)
-              // {
-              _parseNode(n[i - 1]); // }
+            n = node.childNodes;
 
+            for (var i = n.length; i > 0; i--) {
+              if (deep || n[i - 1].nodeType === 3) {
+                _parseNode(n[i - 1]);
+              }
             }
 
             break;
 
           case 3:
             //text
-            t = node.textContent.trimStart().trimEnd();
+            t = node.textContent;
 
-            if (!t.replace(/\s/g, "").length) {
+            if (!t.replace(/\s\s+/g, "").length) {
               //node only contains whitespace
               break;
-            }
+            } // t = t.trimStart().trimEnd();
 
+
+            t = t.replace(/\s\s+/g, " ");
             n = document.createElement("span");
             n.innerHTML = _wrap(t);
             node.replaceWith.apply(node, _toConsumableArray(n.childNodes));
@@ -136,4 +137,4 @@ var WrapChars = /*#__PURE__*/function () {
   }]);
 
   return WrapChars;
-}();
+}(); //export { WrapChars }

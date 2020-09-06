@@ -1,16 +1,14 @@
-<!doctype html>
+b<!doctype html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<title>wrap-chars</title>
 
-	<link href="https://fonts.googleapis.com/css?family=Eater" rel="stylesheet">
-
     <style>
 
         blockquote
         {
-            font: 160% 'Eater', cursive;
+            font: 140% sans-serif;
             text-rendering: optimizeSpeed;
             width: -webkit-max-content;
             width: -moz-max-content;
@@ -25,31 +23,52 @@
             word-break: break-all;
         }
 
+        *.test_class:hover{
+            border: 2px solid blue;
+            margin: -2px;
+        }
+
 	</style>
 
 </head>
 
 <body>
 
-	<blockquote cite="Lewis Carroll">
-		<span class="line"><a href="#" class="skip-this">’Twas <em>brillig</em></a>, and the slithy toves</span><br>
-		<span class="line">Did gyre and gimble in the wabe:</span><br>
-		<span class="line">All mimsy were the borogoves,</span><br>
-		<span class="line skip-this">And the mome raths outgrabe.</span>
+	<blockquote cite="Lorem Ipsum" class="sample">
+        <span class="line">A line of raw text, with no children.</span><br>
+        <span class="line">
+            A line of raw text, with whitespace at the start and end.
+        </span><br>
+        <span class="line">   A    line    of    raw    text,    with    additional    spaces    added    throughout.   </span><br>
+		<span class="line"><strong>A line of text entirely within a nested strong element.</strong></span><br>
+        <span class="line"><em>This emphasised text</em>, at the start of the sentence.</span><br>
+		<span class="line">Line of text, with <em>this emphasised text</em> in the middle.</span><br>
+        <span class="line">A line of text, with <em>this emphasised text at the end.</em></span><br>
+        <span class="line"><span>A line of text, with</span> <span>adjacent nested siblings.</span></span><br>
+        <span class="line">     <span> A line of text, with </span>   nested siblings   <span> and extra spaces.</span>     </span><br>
+        <span class="line">
+            <a href="#">  
+                <span>Nested spans in an anchor with code indenting,</span> 
+                <br>
+                <span>containing adjacent nested siblings</span>  
+                <br>
+                <span>and line breaks.</span>
+            </sapan>  
+        </span>
 	</blockquote>
 
 
 	<script src="../dist/WrapChars.js"></script>
 	<script>
-		let lines = document.querySelectorAll('*.line');
+		let lines = document.querySelectorAll('*.sample');
 		lines.forEach(line => {
             WrapChars.wrap(line, {
-                type: 'letter',
+                type: 'word',
                 tagName: 'span',
-                className: 'testclass',
-                spaceChar: '&ensp;',
-                deep: true,
-                skipClass: "skip-this"
+                spaceChar: "&emsp;",
+                className: 'test_class',
+                skipClass: 'skip_me',
+                deep: true
             })
         });
 

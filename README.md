@@ -99,6 +99,7 @@ The `params` object can contain the following properties, all optional:
 - `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
 - `className` - The class name that can be applied to each wrapped element. Default is *none*.
 - `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
+- `deep` - Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`.
 - `skipClass` - If specified, any element with a matching class name will be ignored.
 
 
@@ -111,7 +112,8 @@ WrapChars.wrap(myElement, {
     tagName: "div",
     className: "wrapped_content",
     spaceChar: "&nbsp;",
-    skipClass: "skip_this"
+    skipClass: "skip_this",
+    deep: false
 });
 ```
 
@@ -125,15 +127,9 @@ WrapChars.wrap(myElement, {
 
 
 
-## Planned improvements
-
-- `params.deep` property to allow/prevent nested elements from being affected.
-
-
-
 ## Version history
 
-- v2.1.0 - Added <del>*deep* and </del>*skipClass* properties
+- v2.1.0 - Added *deep* and *skipClass* properties, improved whitespace handling.
 - v2.0.3 - Added remove leading/trailing whitespace
 - v2.0.2 - Fixed splitting by word removes spaces
 - v2.0.0 - Near complete rewrite to play nicer with other people's markup
