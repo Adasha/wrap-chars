@@ -9,7 +9,6 @@ V2.1.0
 - [Setup](#setup)
 - [Use](#use)
 - [Known issues](#known-issues)
-- [Planned improvements](#planned-improvements)
 - [Version history](#version-history)
 
 ## About
@@ -84,15 +83,15 @@ Any whitespace is reduced down to a single space. Text nodes containing only whi
 
 The `params` object can contain the following properties, all optional:
 
-| Property | Description |
-| --- | --- |
-| `type` | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `'letter'`. |
-| `tagName` | The type of element that will be wrapped around each character. Default is `'span'`. |
-| `className` | The class name that can be applied to each wrapped element. Default is *none*. |
-| `deep` | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
-| `wrapSpaces` | Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them. |
-| `skipClass` | If specified, any element with a matching class name will be ignored. |
-| `spaceChar` | The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*. |
+| Property | Type | Description |
+| --- | --- | --- |
+| `type` | string | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `"letter"` or `"word"`. Default is `"letter"`. |
+| `tagName` | string | The type of element that will be wrapped around each character. Default is `"span"`. |
+| `className` | string | The class name that can be applied to each wrapped element. Default is *undefined*. |
+| `deep` | Boolean | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
+| `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them. Default is `false` |
+| `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
+| `spaceChar` | string | The character to replace spaces with, if specified. This can be an HTML entity, such as `"&ensp;"`. Default is *undefined*. |
 
 ##### Example
 
