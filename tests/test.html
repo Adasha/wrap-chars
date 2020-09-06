@@ -63,12 +63,12 @@
 		let lines = document.querySelectorAll('*.sample');
 		lines.forEach(line => {
             WrapChars.wrap(line, {
-                type: 'word',
+                type: 'letter',
                 tagName: 'span',
-                spaceChar: "&emsp;",
                 className: 'test_class',
                 skipClass: 'skip_me',
-                deep: true
+                deep: true,
+                wrapSpaces: false
             })
         });
 

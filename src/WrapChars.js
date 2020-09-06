@@ -1,7 +1,7 @@
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.1.0
+ * @version 2.2.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -17,9 +17,10 @@ class WrapChars
      * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
-     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+     * @param {string} [params.wrapSpaces=false] - If true, will wrap space characters.
      * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
+     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;". Will override 'wrapSpaces'.
      * @method
      * @static
      */
@@ -30,7 +31,8 @@ class WrapChars
             className = params.className,
             spaceChar = params.spaceChar,
             deep = params.hasOwnProperty("deep") ? params.deep : true,
-            skipClass = params.skipClass;
+            skipClass = params.skipClass,
+            wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
 
 
         _parseNode(element);
@@ -109,9 +111,17 @@ class WrapChars
                 let letter = (chars[char]===" " && spaceChar) ? spaceChar : chars[char];
                 let str = "";
 
-                str += `<${tagName}`;
-                if(className && typeof className==='string') str += ` class="${className}"`;
-                str += `>` + letter + `</${tagName}>`;
+                if(!wrapSpaces && letter===" ")
+                {
+                    str += " ";
+                }
+                else
+                {
+                    str += `<${tagName}`;
+                    if(className && typeof className==='string') str += ` class="${className}"`;
+                    str += `>` + letter + `</${tagName}>`;
+                }
+                
 
                 rslt += str;
             }

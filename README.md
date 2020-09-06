@@ -89,9 +89,10 @@ The `params` object can contain the following properties, all optional:
 - `type` - Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `'letter'`.
 - `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
 - `className` - The class name that can be applied to each wrapped element. Default is *none*.
-- `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
 - `deep` - Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`.
+- `wrapSpaces` - Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them.
 - `skipClass` - If specified, any element with a matching class name will be ignored.
+- `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
 
 ##### Example
 
@@ -110,10 +111,10 @@ WrapChars.wrap(myElement, {
 
 - `word` type doesn't deal with punctuation
 - interferes with browser's text wrapping behaviour
-- no option to not wrap node's entire sub-tree
 
 ## Version history
 
+- v2.2.0 - Added *wrapSpaces* property.
 - v2.1.0 - Added *deep* and *skipClass* properties, improved whitespace handling.
 - v2.0.3 - Fixed leading/trailing whitespace
 - v2.0.2 - Fixed splitting by word removes spaces

@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.1.0
+ * @version 2.2.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -41,9 +41,10 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
-     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+     * @param {string} [params.wrapSpaces=false] - If true, will wrap space characters.
      * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
+     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;". Will override 'wrapSpaces'.
      * @method
      * @static
      */
@@ -54,7 +55,8 @@ var WrapChars = /*#__PURE__*/function () {
           className = params.className,
           spaceChar = params.spaceChar,
           deep = params.hasOwnProperty("deep") ? params.deep : true,
-          skipClass = params.skipClass;
+          skipClass = params.skipClass,
+          wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
 
       _parseNode(element);
       /**
@@ -125,9 +127,15 @@ var WrapChars = /*#__PURE__*/function () {
         for (var _char = 0; _char < chars.length; _char++) {
           var letter = chars[_char] === " " && spaceChar ? spaceChar : chars[_char];
           var str = "";
-          str += "<".concat(tagName);
-          if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");
-          str += ">" + letter + "</".concat(tagName, ">");
+
+          if (!wrapSpaces && letter === " ") {
+            str += " ";
+          } else {
+            str += "<".concat(tagName);
+            if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");
+            str += ">" + letter + "</".concat(tagName, ">");
+          }
+
           rslt += str;
         }
 
