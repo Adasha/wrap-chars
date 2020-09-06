@@ -16,9 +16,7 @@ V2.1.0
 
 Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
 
-Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup.
-
-The syntax has also changed almost completely, but should now allow for more graceful changes in the future.
+Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup. Several ways exist to control the wrapping process.
 
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
@@ -73,7 +71,7 @@ lines.forEach (line => WrapChars.wrap (line));
 
 Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
 
-Any leading/trailing whitespace from each text node is removed. Text nodes containing only whitespace are ignored completely.
+Any whitespace is reduced down to a single space. Text nodes containing only whitespace are ignored completely.
 
 ### Configuration
 
@@ -86,13 +84,15 @@ Any leading/trailing whitespace from each text node is removed. Text nodes conta
 
 The `params` object can contain the following properties, all optional:
 
-- `type` - Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `'letter'`.
-- `tagName` - The type of element that will be wrapped around each character. Default is `'span'`.
-- `className` - The class name that can be applied to each wrapped element. Default is *none*.
-- `deep` - Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`.
-- `wrapSpaces` - Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them.
-- `skipClass` - If specified, any element with a matching class name will be ignored.
-- `spaceChar` - The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*.
+| Property | Description |
+| --- | --- |
+| `type` | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `'letter'` or `'word'`. Default is `'letter'`. |
+| `tagName` | The type of element that will be wrapped around each character. Default is `'span'`. |
+| `className` | The class name that can be applied to each wrapped element. Default is *none*. |
+| `deep` | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
+| `wrapSpaces` | Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them. |
+| `skipClass` | If specified, any element with a matching class name will be ignored. |
+| `spaceChar` | The character to replace spaces with, if specified. This can be an HTML entity, such as `'&ensp;'`. Default is *none*. |
 
 ##### Example
 
@@ -101,16 +101,16 @@ WrapChars.wrap(myElement, {
     type: "word",
     tagName: "div",
     className: "wrapped_content",
-    spaceChar: "&nbsp;",
+    deep: false,
+    wrapSpaces: true,
     skipClass: "skip_this",
-    deep: false
+    spaceChar: "&nbsp;"
 });
 ```
 
 ## Known issues
 
-- `word` type doesn't deal with punctuation
-- interferes with browser's text wrapping behaviour
+- `word` type cant differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
 
 ## Version history
 
