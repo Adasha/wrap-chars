@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.0.3
+ * @version 2.1.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -43,7 +43,7 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {boolean} [params.skipClass=false] - If provided, will pass over any elements with that class.
+     * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
      * @method
      * @static
      */

@@ -19,7 +19,7 @@ class WrapChars
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {boolean} [params.skipClass=false] - If provided, will pass over any elements with that class. 
+     * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
      * @method
      * @static
      */
