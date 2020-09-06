@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.0.2
+ * @version 2.0.3
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -34,9 +34,8 @@ var WrapChars = /*#__PURE__*/function () {
     key: "wrap",
 
     /**
+     * Wrap inline text characters/words with HTML elements.
      * 
-     * @static
-     * @method wrap
      * @param {Element} element - A reference to a DOM element.
      * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
      * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
@@ -44,7 +43,9 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;".
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {boolean} [params.skipPrewrapped] - Whether to pass on characters that have been pre-wrapped.
+     * @param {boolean} [params.skipClass=false] - If provided, will pass over any elements with that class.
+     * @method
+     * @static
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -53,7 +54,7 @@ var WrapChars = /*#__PURE__*/function () {
           className = params.className,
           spaceChar = params.spaceChar,
           deep = params.deep || true,
-          skipPre = params.skipPrewrapped || false;
+          skipClass = params.skipClass;
 
       _parseNode(element);
       /**
@@ -70,6 +71,10 @@ var WrapChars = /*#__PURE__*/function () {
           case 1:
             //element
             n = node.childNodes;
+
+            if (skipClass && typeof skipClass === "string" && node.classList.contains(skipClass)) {
+              break;
+            }
 
             for (var i = n.length; i > 0; i--) {
               // if(n[i-1].nodeType===1 && deep)
