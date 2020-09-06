@@ -1,4 +1,7 @@
+
 # WrapChars.js
+
+V2.1.0
 
 ## Contents
 
@@ -9,8 +12,8 @@
 - [Planned improvements](#planned-improvements)
 - [Version history](#version-history)
 
-
 ## About
+
 Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
 
 Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup.
@@ -18,8 +21,6 @@ Version 1 of this was very blunt in its approach, stripping out any nested tags 
 The syntax has also changed almost completely, but should now allow for more graceful changes in the future.
 
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
-
-
 
 ## Setup
 
@@ -32,11 +33,7 @@ Import it into your HTML:
 <script src="WrapChars.min.js"></script>
 ```
 
-
 Ensure the DOM has loaded completely before continuing.
-
-
-
 
 ## Use
 
@@ -55,20 +52,17 @@ Say we have the following HTML:
 </blockquote>
 ```
 
-
 Grab a reference to the element you want to affect:
 
 ```javascript
 let domElement = document.getElementById ('poem');
 ```
 
-
 To wrap the characters using the default settings, call the `WrapChars.wrap()` static method using the reference as the argument:
 
 ```javascript
 WrapChars.wrap (domElement);
 ```
-
 
 You could also iterate over a NodeList if you prefer:
 
@@ -77,11 +71,9 @@ let lines = document.querySelectorAll ('*.lines');
 lines.forEach (line => WrapChars.wrap (line));
 ```
 
-
 Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
 
 Any leading/trailing whitespace from each text node is removed. Text nodes containing only whitespace are ignored completely.
-
 
 ### Configuration
 
@@ -89,7 +81,6 @@ Any leading/trailing whitespace from each text node is removed. Text nodes conta
 
 - `element` - a reference to a DOM element, e.g. as obtained via `querySelector()` or `getElementById()`.
 - `params` - (optional) an object containing key/value pairs to configure the method (see below).
-
 
 #### `params` object
 
@@ -102,9 +93,7 @@ The `params` object can contain the following properties, all optional:
 - `deep` - Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`.
 - `skipClass` - If specified, any element with a matching class name will be ignored.
 
-
-
-##### Example:
+##### Example
 
 ```javascript
 WrapChars.wrap(myElement, {
@@ -117,22 +106,16 @@ WrapChars.wrap(myElement, {
 });
 ```
 
-
-
 ## Known issues
 
 - `word` type doesn't deal with punctuation
 - interferes with browser's text wrapping behaviour
 - no option to not wrap node's entire sub-tree
 
-
-
 ## Version history
 
 - v2.1.0 - Added *deep* and *skipClass* properties, improved whitespace handling.
-- v2.0.3 - Added remove leading/trailing whitespace
+- v2.0.3 - Fixed leading/trailing whitespace
 - v2.0.2 - Fixed splitting by word removes spaces
 - v2.0.0 - Near complete rewrite to play nicer with other people's markup
 - v1.0.x - Original version
-
-
