@@ -23,7 +23,7 @@ Version 1 of this was very blunt in its approach, stripping out any nested tags 
 
 ### Vanilla
 
-Download one of the JavaScript files from the `dist` folder, probably the minified one.
+Download one of the [JavaScript files from the `dist` folder](https://github.com/Adasha/wrap-chars/tree/master/dist), probably the minified one.
 Import it into your HTML:
 
 ```HTML
@@ -31,6 +31,10 @@ Import it into your HTML:
 ```
 
 Ensure the DOM has loaded completely before continuing.
+
+### npm/browserify/webpack etc
+
+tba
 
 ## Use
 

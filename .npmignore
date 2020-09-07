@@ -1,0 +1,8 @@
+
+node_modules
+_notes/
+src
+tests
+.babelrc
+gulpfile.js
+.vscode

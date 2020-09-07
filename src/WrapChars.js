@@ -18,7 +18,7 @@ class WrapChars
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {string} [params.wrapSpaces=false] - If true, will wrap space characters.
+     * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters.
      * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
      * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;". Will override 'wrapSpaces'.
      * @method
@@ -26,7 +26,7 @@ class WrapChars
      */
     static wrap(element, params = {})
     {
-        let type = params.split || params.type || "letter",
+        let split = params.split || params.type || "letter",
             tagName = params.tagName || "span",
             className = params.className,
             spaceChar = params.spaceChar,
@@ -93,12 +93,12 @@ class WrapChars
          */
         function _wrap(text)
         {
-            let delimiter = type==="word" ? " " : "",
+            let delimiter = split==="word" ? " " : "",
                 chars = text.split(delimiter),
                 rslt = "";
             
             //restore spaces if split type = 'word'
-            if(type==="word")
+            if(split==="word")
             {
                 for (let i=chars.length; i>1; i--)
                 {
@@ -136,4 +136,4 @@ class WrapChars
 
 }
 
-//export { WrapChars }
+// export { WrapChars }
