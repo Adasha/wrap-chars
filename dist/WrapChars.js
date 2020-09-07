@@ -38,7 +38,7 @@ var WrapChars = /*#__PURE__*/function () {
      * 
      * @param {Element} element - A reference to a DOM element.
      * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
-     * @param {string} [params.type="letter"] - The method by which text will be divided. "letter"|"word"
+     * @param {string} [params.split="letter"] - The method by which text will be divided. "letter"|"word". This property was previously called `type` - `type` still exists as an alias but is deprecated.
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
@@ -50,7 +50,7 @@ var WrapChars = /*#__PURE__*/function () {
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var type = params.type || "letter",
+      var type = params.split || params.type || "letter",
           tagName = params.tagName || "span",
           className = params.className,
           spaceChar = params.spaceChar,
