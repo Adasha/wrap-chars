@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.1.0
+V2.2.0
 
 ## Contents
 
@@ -15,7 +15,7 @@ V2.1.0
 
 Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
 
-Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup. Several ways exist to control the wrapping process.
+Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup. It has several ways to control the wrapping process.
 
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
@@ -87,11 +87,11 @@ The `params` object can contain the following properties, all optional:
 
 | Property | Type | Description |
 | --- | --- | --- |
-| `type` | string | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `"letter"` or `"word"`. Default is `"letter"`. |
+| `split` | string | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `"letter"` or `"word"`. Default is `"letter"`. `split` replaces `type` since v2.2, though `type` still exists as an alias. |
 | `tagName` | string | The type of element that will be wrapped around each character. Default is `"span"`. |
 | `className` | string | The class name that can be applied to each wrapped element. Default is *undefined*. |
 | `deep` | Boolean | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
-| `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. Has no efffect if `spaceChar` has overwritten them. Default is `false` |
+| `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. Has no effect if `spaceChar` has overwritten them. Default is `false` |
 | `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
 | `spaceChar` | string | The character to replace spaces with, if specified. This can be an HTML entity, such as `"&ensp;"`. Default is *undefined*. |
 
@@ -99,7 +99,7 @@ The `params` object can contain the following properties, all optional:
 
 ```javascript
 WrapChars.wrap(myElement, {
-    type: "word",
+    split: "word",
     tagName: "div",
     className: "wrapped_content",
     deep: false,
@@ -115,7 +115,7 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.2.0 - Added *wrapSpaces* property.
+- v2.2.0 - Added *wrapSpaces* property, renamed *type* to *split*.
 - v2.1.0 - Added *deep* and *skipClass* properties, improved whitespace handling.
 - v2.0.3 - Fixed leading/trailing whitespace
 - v2.0.2 - Fixed splitting by word removes spaces
