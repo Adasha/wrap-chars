@@ -30,11 +30,17 @@ Import it into your HTML:
 <script src="WrapChars.min.js"></script>
 ```
 
+You can also embed from UNPKG:
+
+```HTML
+<script src="https://www.unpkg.com/wrap-chars"></script>
+```
+
 Ensure the DOM has loaded completely before continuing.
 
 ### npm/browserify/webpack etc
 
-tba
+tbc
 
 ## Use
 
