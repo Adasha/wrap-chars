@@ -121,7 +121,7 @@ WrapChars.wrap(myElement, {
 
 ## Known issues
 
-- `word` type cant differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
+- `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
 
 ## Version history
 

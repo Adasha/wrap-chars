@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Individually wrap characters in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
@@ -46,7 +46,7 @@
     "delimiter",
     "class"
   ],
-  "homepage": "http://lab.adasha.com/wrap-chars",
+  "homepage": "http://lab.adasha.com/components/wrap-chars",
   "repository": {
     "type": "git",
     "url": "https://github.com/Adasha/wrap-chars"
