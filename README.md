@@ -13,7 +13,7 @@ V2.2.2
 
 ## About
 
-Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very tiny (3KB minified).
+Tiny script containing just one, static method that takes any element and wraps each inline character in a given tag, with an optional class. Very small (<3KB minified).
 
 Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup. It has several ways to control the wrapping process.
 
@@ -122,7 +122,7 @@ WrapChars.wrap(myElement, {
 ## Known issues
 
 - `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
-- Certain combinations of HTML mark-up with the `wrapSpaces` and `spaceChar` parameters can cause additional, empty elements to be added when using a `split` type of `word`.
+- Certain (unlikely) combinations of HTML mark-up can cause empty elements to be added when `wrapSpaces` is `true` and `split` is equal to `word`.
 
 ## Version history
 
