@@ -12,7 +12,9 @@
 
 	<script src="../dist/WrapChars.js"></script>
 	<script>
-		let el = document.getElementById('test');
+        let el = document.getElementById('test'),
+            backup = el.cloneNode(true);
+
         WrapChars.wrap(el, {
             type: 'letter',
             tagName: 'span',
@@ -21,6 +23,10 @@
             deep: true
         });
 
+        function restoreMarkup()
+        {
+            el.innerHTML = backup.innerHTML;
+        }
 	</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.2.1
+V2.2.2
 
 ## Contents
 
@@ -101,9 +101,9 @@ The `params` object can contain the following properties, all optional:
 | `tagName` | string | The type of element that will be wrapped around each character. Default is `"span"`. |
 | `className` | string | The class name that can be applied to each wrapped element. Default is *undefined*. |
 | `deep` | Boolean | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
-| `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. Has no effect if `spaceChar` has overwritten them. Default is `false` |
+| `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. If a value is set for `spaceChar` those characters are also subject to this setting. Default is `false` |
 | `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
-| `spaceChar` | string | The character to replace spaces with, if specified. This can be an HTML entity, such as `"&ensp;"`. Default is *undefined*. |
+| `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
 
 ##### Example
 
@@ -122,6 +122,7 @@ WrapChars.wrap(myElement, {
 ## Known issues
 
 - `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
+- Certain combinations of HTML mark-up with the `wrapSpaces` and `spaceChar` parameters can cause additional, empty elements to be added when using a `split` type of `word`.
 
 ## Version history
 

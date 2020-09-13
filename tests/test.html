@@ -53,8 +53,9 @@
                 <span>containing adjacent nested siblings</span>  
                 <br>
                 <span>and line breaks.</span>
-            </sapan>  
-        </span>
+            </a>  
+        </span><br>
+        <span class="line">This text includes non-breaking&nbsp;spaces and en-width&ensp;spaces.</span><br>
 	</blockquote>
 
 
@@ -63,12 +64,13 @@
 		let lines = document.querySelectorAll('*.sample');
 		lines.forEach(line => {
             WrapChars.wrap(line, {
-                type: 'word',
+                type: 'letter',
                 tagName: 'span',
                 className: 'test_class',
                 skipClass: 'skip_me',
                 deep: true,
-                wrapSpaces: false
+                wrapSpaces: true,
+                spaceChar: "\u2002"
             })
         });
 

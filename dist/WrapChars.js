@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.1
+ * @version 2.2.2
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -50,15 +50,28 @@ var WrapChars = /*#__PURE__*/function () {
      */
     value: function wrap(element) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
       var split = params.split || params.type || "letter",
           tagName = params.tagName || "span",
           className = params.className,
-          spaceChar = params.spaceChar,
+          spaceChar = _sanitiseSpaceChar(params.spaceChar),
           deep = params.hasOwnProperty("deep") ? params.deep : true,
           skipClass = params.skipClass,
           wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
 
       _parseNode(element);
+      /**
+       * 
+       * @param {string} str 
+       * @returns {string}
+       */
+
+
+      function _sanitiseSpaceChar(str) {
+        var e = document.createElement("span");
+        e.innerHTML = str;
+        return e.textContent;
+      }
       /**
        * 
        * @param {HTMLElement} node - The node to process.
@@ -125,11 +138,11 @@ var WrapChars = /*#__PURE__*/function () {
         }
 
         for (var _char = 0; _char < chars.length; _char++) {
-          var letter = chars[_char] === " " && spaceChar ? spaceChar : chars[_char];
-          var str = "";
+          var letter = chars[_char] === " " && spaceChar ? spaceChar : chars[_char],
+              str = "";
 
-          if (!wrapSpaces && letter === " ") {
-            str += " ";
+          if (!wrapSpaces && (letter === " " || letter === spaceChar)) {
+            str += spaceChar || " ";
           } else {
             str += "<".concat(tagName);
             if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");

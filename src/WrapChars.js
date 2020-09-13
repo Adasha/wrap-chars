@@ -1,7 +1,7 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.1
+ * @version 2.2.2
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -29,7 +29,7 @@ class WrapChars
         let split = params.split || params.type || "letter",
             tagName = params.tagName || "span",
             className = params.className,
-            spaceChar = params.spaceChar,
+            spaceChar = _sanitiseSpaceChar(params.spaceChar),
             deep = params.hasOwnProperty("deep") ? params.deep : true,
             skipClass = params.skipClass,
             wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
@@ -38,6 +38,20 @@ class WrapChars
         _parseNode(element);
 
 
+        /**
+         * 
+         * @param {string} str 
+         * @returns {string}
+         */
+        function _sanitiseSpaceChar(str)
+        {
+            let e = document.createElement("span");
+            e.innerHTML = str;
+            return e.textContent;
+        }
+
+
+        
         /**
          * 
          * @param {HTMLElement} node - The node to process.
@@ -108,12 +122,12 @@ class WrapChars
 
             for(let char=0; char<chars.length; char++)
             {
-                let letter = (chars[char]===" " && spaceChar) ? spaceChar : chars[char];
-                let str = "";
+                let letter = (chars[char]===" " && spaceChar) ? spaceChar : chars[char],
+                    str    = "";
 
-                if(!wrapSpaces && letter===" ")
+                if(!wrapSpaces && (letter===" " || letter===spaceChar))
                 {
-                    str += " ";
+                    str += spaceChar || " ";
                 }
                 else
                 {
