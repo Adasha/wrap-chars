@@ -64,13 +64,13 @@
 		let lines = document.querySelectorAll('*.sample');
 		lines.forEach(line => {
             WrapChars.wrap(line, {
-                type: 'letter',
+                type: 'word',
                 tagName: 'span',
                 className: 'test_class',
                 skipClass: 'skip_me',
                 deep: true,
                 wrapSpaces: true,
-                spaceChar: "\u2002"
+                spaceChar: null
             })
         });
 

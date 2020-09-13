@@ -42,9 +42,9 @@ var WrapChars = /*#__PURE__*/function () {
      * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
      * @param {string} [params.className] - An optional class name to add to each element.
      * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters.
+     * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters, including spaceChar if specified.
      * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
-     * @param {string} [params.spaceChar] - An optional character to replace inline spaces with. Can include HTML entities such as "&amp;ensp;". Will override 'wrapSpaces'.
+     * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. Will be sanitised to standard text internally.
      * @method
      * @static
      */
@@ -61,6 +61,7 @@ var WrapChars = /*#__PURE__*/function () {
 
       _parseNode(element);
       /**
+       * _sanitiseSpaceChar()
        * 
        * @param {string} str 
        * @returns {string}
@@ -85,7 +86,7 @@ var WrapChars = /*#__PURE__*/function () {
           case 1:
             //element
             // console.log(node + ': ' + node.children.length +' / '+ node.childNodes.length);
-            if (skipClass && typeof skipClass === "string" && node.classList.contains(skipClass)) {
+            if (skipClass && node.classList.contains(skipClass)) {
               break;
             }
 
@@ -143,7 +144,7 @@ var WrapChars = /*#__PURE__*/function () {
 
           if (!wrapSpaces && (letter === " " || letter === spaceChar)) {
             str += spaceChar || " ";
-          } else {
+          } else if (letter.length) {
             str += "<".concat(tagName);
             if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");
             str += ">" + letter + "</".concat(tagName, ">");
