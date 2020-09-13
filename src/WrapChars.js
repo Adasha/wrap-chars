@@ -1,5 +1,5 @@
 /**
- * WrapChars Class
+ * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
  * @version 2.2.1
  * @author Adam Shailer <adasha76@outlook.com>

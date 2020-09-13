@@ -125,9 +125,7 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.2.0 - Added *wrapSpaces* property, renamed *type* to *split*.
-- v2.1.0 - Added *deep* and *skipClass* properties, improved whitespace handling.
-- v2.0.3 - Fixed leading/trailing whitespace
-- v2.0.2 - Fixed splitting by word removes spaces
-- v2.0.0 - Near complete rewrite to play nicer with other people's markup
-- v1.0.x - Original version
+- v2.2 - Added *wrapSpaces* property, renamed *type* to *split*.
+- v2.1 - Added *deep* and *skipClass* properties, improved whitespace handling.
+- v2.0 - Near complete rewrite to play nicer with other people's markup
+- v1.0 - Original version
