@@ -1,7 +1,7 @@
 /**
  * WrapChars Class
  * @class WrapChars
- * @version 2.2.0
+ * @version 2.2.1
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
