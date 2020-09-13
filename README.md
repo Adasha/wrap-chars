@@ -122,7 +122,7 @@ WrapChars.wrap(myElement, {
 ## Known issues
 
 - `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
-- Certain (unlikely) combinations of HTML mark-up can cause empty elements to be added when `wrapSpaces` is `true` and `split` is equal to `word`.
+- Certain (unlikely) combinations of HTML mark-up can cause empty elements to be added when `wrapSpaces` is `true` and `split` is equal to `word`. Can be fixed with minor HTML reformatting.
 
 ## Version history
 
