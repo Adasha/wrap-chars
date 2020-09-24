@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>wrap-chars</title>
+
+    <style>
+
+        blockquote
+        {
+            font: 140% sans-serif;
+            color: #000;
+            background: #eee;
+            padding: 2em;
+            /* text-rendering: optimizeSpeed;
+            width: -webkit-max-content;
+            width: -moz-max-content;
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-all; */
+        }
+
+        *.test_class:hover{
+            border: 2px solid blue;
+            margin: -2px;
+        }
+
+	</style>
+
+</head>
+
+<body>
+
+    <main>
+
+        <blockquote cite="Lorem Ipsum" class="sample">
+
+            <span class="line">* *</span>
+                        
+            <br>
+
+            <span class="line"> * </span>
+                        
+            <br>
+
+            <span class="line">*  </span>
+                        
+            <br>
+
+            <span class="line">*   *</span>
+                        
+            <br>
+
+            <span class="line">*
+                *</span>
+                        
+            <br>
+
+            <span class="line">
+                * *
+            </span>
+                        
+            <br>
+
+
+
+        </blockquote>
+    
+    </main>
+
+
+
+    <aside class="info">
+
+    </aside>
+
+	<script src="../dist/WrapChars.js"></script>
+	<script>
+
+        let lines = document.querySelectorAll('*.sample');
+        
+		lines.forEach(line => {
+            WrapChars.wrap(line, {
+                type: 'word',
+                tagName: 'span',
+                className: 'test_class',
+                skipClass: 'skip_me',
+                deep: true,
+                wrapSpaces: true,
+                spaceChar: null
+            })
+        });
+
+
+
+        let info = document.querySelector("*.info");
+        info.innerHTML = `
+        `;
+
+	</script>
+
+</body>
+</html>
