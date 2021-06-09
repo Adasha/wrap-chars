@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Individually wrap inline characters/words in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
@@ -57,10 +57,10 @@
     "email": "adasha76@outlook.com"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "eslint": "^7.16.0",
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "eslint": "^7.28.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-gzip": "^1.4.2",
