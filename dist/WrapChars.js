@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.2
+ * @version 2.2.3
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
