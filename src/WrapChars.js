@@ -10,6 +10,7 @@ class WrapChars
 
 
     /**
+     * 
      * Wrap inline text characters/words with HTML elements.
      * 
      * @param {Element} element - A reference to a DOM element.
