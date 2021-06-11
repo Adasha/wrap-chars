@@ -34,6 +34,7 @@ var WrapChars = /*#__PURE__*/function () {
     key: "wrap",
     value:
     /**
+     * 
      * Wrap inline text characters/words with HTML elements.
      * 
      * @param {Element} element - A reference to a DOM element.
@@ -146,7 +147,7 @@ var WrapChars = /*#__PURE__*/function () {
             str += spaceChar || " ";
           } else if (letter.length) {
             str += "<".concat(tagName);
-            if (className && typeof className === 'string') str += " class=\"".concat(className, "\"");
+            if (className && typeof className === 'string' && className.length) str += " class=\"".concat(className, "\"");
             str += ">" + letter + "</".concat(tagName, ">");
           }
 

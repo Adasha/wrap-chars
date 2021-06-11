@@ -134,7 +134,7 @@ class WrapChars
                 else if(letter.length)
                 {
                     str += `<${tagName}`;
-                    if(className && typeof className==='string') str += ` class="${className}"`;
+                    if(className && typeof className==='string' && className.length) str += ` class="${className}"`;
                     str += `>` + letter + `</${tagName}>`;
                 }
                 
