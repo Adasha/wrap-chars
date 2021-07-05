@@ -23,6 +23,8 @@ blockquote
 
 #controls
 {
+    position: fixed;
+    top: 10px; left: 10px;
     width: max-content;
     padding: 1em;
     border: 1px solid #000;
