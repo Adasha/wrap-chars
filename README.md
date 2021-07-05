@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.2.3
+V2.2.4
 
 ## Contents
 

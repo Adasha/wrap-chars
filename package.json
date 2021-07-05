@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Individually wrap inline characters/words in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
