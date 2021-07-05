@@ -21,7 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.3
+ * @version 2.2.4
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -72,13 +72,13 @@ var WrapChars = /*#__PURE__*/function () {
       function _sanitiseSpaceChar(str) {
         var e = document.createElement("span");
         e.innerHTML = str;
-        var txt = e.textContent;
+        var txt = e.innerText; // txt = txt.replace(/&/g, '&amp;'); // "
+
         txt = txt.replace(/</g, '&lt;'); // <
 
         txt = txt.replace(/>/g, '&gt;'); // >
 
         txt = txt.replace(/"/g, '&quot;'); // "
-        // txt = txt.replace(/&/g, '&amp;'); // "
 
         return txt;
       }
