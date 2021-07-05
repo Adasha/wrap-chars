@@ -72,7 +72,15 @@ var WrapChars = /*#__PURE__*/function () {
       function _sanitiseSpaceChar(str) {
         var e = document.createElement("span");
         e.innerHTML = str;
-        return e.textContent;
+        var txt = e.textContent;
+        txt = txt.replace(/</g, '&lt;'); // <
+
+        txt = txt.replace(/>/g, '&gt;'); // >
+
+        txt = txt.replace(/"/g, '&quot;'); // "
+        // txt = txt.replace(/&/g, '&amp;'); // "
+
+        return txt;
       }
       /**
        * 

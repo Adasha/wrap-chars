@@ -49,7 +49,12 @@ class WrapChars
         {
             let e = document.createElement("span");
             e.innerHTML = str;
-            return e.textContent;
+            let txt = e.textContent;
+            txt = txt.replace(/</g, '&lt;'); // <
+            txt = txt.replace(/>/g, '&gt;'); // >
+            txt = txt.replace(/"/g, '&quot;'); // "
+            // txt = txt.replace(/&/g, '&amp;'); // "
+           return txt;
         }
 
 
