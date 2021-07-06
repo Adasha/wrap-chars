@@ -72,13 +72,10 @@ var WrapChars = /*#__PURE__*/function () {
       function _sanitiseSpaceChar(str) {
         var e = document.createElement("span");
         e.innerHTML = str;
-        var txt = e.innerText; // txt = txt.replace(/&/g, '&amp;'); // "
-
-        txt = txt.replace(/</g, '&lt;'); // <
-
-        txt = txt.replace(/>/g, '&gt;'); // >
-
-        txt = txt.replace(/"/g, '&quot;'); // "
+        var txt = e.textContent; // txt = txt.replace(/&/g, '&amp;'); // "
+        // txt = txt.replace(/</g, '&lt;'); // <
+        // txt = txt.replace(/>/g, '&gt;'); // >
+        // txt = txt.replace(/"/g, '&quot;'); // "
 
         return txt;
       }
