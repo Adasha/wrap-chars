@@ -123,6 +123,7 @@ WrapChars.wrap(myElement, {
 
 - `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
 - Certain (unlikely) combinations of HTML mark-up can cause empty elements to be added when `wrapSpaces` is `true` and `split` is equal to `word`. Can be fixed with minor HTML reformatting.
+- CodeQL flags a couple of lines for passing DOM text directly into HTML. Since elements are removed first I am not convinced this is an issue.
 
 ## Version history
 
