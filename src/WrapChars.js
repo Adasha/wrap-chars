@@ -10,7 +10,7 @@ class WrapChars
 
 
     /**
-     * 
+     * wrap()
      * Wrap inline text characters/words with HTML elements.
      * 
      * @param {Element} element - A reference to a DOM element.
@@ -60,6 +60,7 @@ class WrapChars
 
         
         /**
+         * _parseNode()
          * 
          * @param {HTMLElement} node - The node to process.
          */
@@ -108,6 +109,7 @@ class WrapChars
 
 
         /**
+         * _wrap()
          * 
          * @param {string} text - The text to wrap.
          * @returns {string} The processed HTML string.

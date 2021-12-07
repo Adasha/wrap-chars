@@ -34,7 +34,7 @@ var WrapChars = /*#__PURE__*/function () {
     key: "wrap",
     value:
     /**
-     * 
+     * wrap()
      * Wrap inline text characters/words with HTML elements.
      * 
      * @param {Element} element - A reference to a DOM element.
@@ -80,6 +80,7 @@ var WrapChars = /*#__PURE__*/function () {
         return txt;
       }
       /**
+       * _parseNode()
        * 
        * @param {HTMLElement} node - The node to process.
        */
@@ -127,6 +128,7 @@ var WrapChars = /*#__PURE__*/function () {
         }
       }
       /**
+       * _wrap()
        * 
        * @param {string} text - The text to wrap.
        * @returns {string} The processed HTML string.
