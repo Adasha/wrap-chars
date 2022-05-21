@@ -47,6 +47,8 @@ class WrapChars
          */
         function _sanitiseSpaceChar(str)
         {
+            if (!str) return;
+
             let e = document.createElement("span");
             e.innerHTML = str;
             let txt = e.textContent;
@@ -54,6 +56,7 @@ class WrapChars
             // txt = txt.replace(/</g, '&lt;'); // <
             // txt = txt.replace(/>/g, '&gt;'); // >
             // txt = txt.replace(/"/g, '&quot;'); // "
+            
             return txt;
         }
 

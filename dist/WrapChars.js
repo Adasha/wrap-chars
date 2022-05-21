@@ -70,6 +70,7 @@ var WrapChars = /*#__PURE__*/function () {
 
 
       function _sanitiseSpaceChar(str) {
+        if (!str) return;
         var e = document.createElement("span");
         e.innerHTML = str;
         var txt = e.textContent; // txt = txt.replace(/&/g, '&amp;'); // "

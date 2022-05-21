@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>wrap-chars</title>
+
+    <style>
+        *.wrapped
+        {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <blockquote id="jabberwocky" class="centerpiece">
+        <span class="line">’Twas brillig, and the slithy toves</span><br>
+        <span class="line">Did gyre and gimble in the wabe:</span><br>
+        <span class="line">All mimsy were the borogoves,</span><br>
+        <span class="line">And the mome raths outgrabe.</span>
+    </blockquote>
+
+    <script src="../src/WrapChars.js"></script>
+
+    <script>
+        let node = document.querySelector('*.centerpiece');
+        WrapChars.wrap(node, {className: 'wrapped'});
+    </script>
+
+</body>
+
+</html>
