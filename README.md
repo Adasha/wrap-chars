@@ -19,6 +19,8 @@ Version 1 of this was very blunt in its approach, stripping out any nested tags 
 
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
+Note: There was a long-standing issue where spaces would be 'undefined' if a spaceChar was not explicitly set, thanks to an oversight in the tests. This is fixed in 2.2.5.
+
 ## Setup
 
 ### Vanilla
