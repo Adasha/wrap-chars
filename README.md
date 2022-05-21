@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.2.4
+V2.2.5
 
 ## Contents
 
@@ -127,7 +127,8 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.2 - Added *wrapSpaces* property, renamed *type* to *split*.
-- v2.1 - Added *deep* and *skipClass* properties, improved whitespace handling.
-- v2.0 - Near complete rewrite to play nicer with other people's markup
-- v1.0 - Original version
+*- v2.2.5 - Fixed undefined spaceChar bug.*
+- v2.2   - Added *wrapSpaces* property, renamed *type* to *split*.
+- v2.1   - Added *deep* and *skipClass* properties, improved whitespace handling.
+- v2.0   - Near complete rewrite to play nicer with other people's markup
+- v1.0   - Original version
