@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.2.5",
+  "version": "2.3.0a1",
   "description": "Individually wrap inline characters/words in a chosen element, with an optional class.",
   "author": {
     "name": "Adam Shailer",
@@ -68,7 +68,7 @@
     "gulp-uglify": "^3.0.2"
   },
   "scripts": {
-    "build": "gulp build:js",
+    "build": "gulp build:js && gulp build:mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

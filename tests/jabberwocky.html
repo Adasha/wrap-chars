@@ -21,10 +21,14 @@
         <span class="line">And the mome raths outgrabe.</span>
     </blockquote>
 
-    <script src="../src/WrapChars.js"></script>
+	<!-- <script src="../src/WrapChars.mjs" type="module"></script> -->
+    <!-- <script src="jabberwocky.js" type="module"></script> -->
 
-    <script>
+    <script type="module">
+        import WrapChars from '../src/WrapChars.mjs';
+
         let node = document.querySelector('*.centerpiece');
+
         WrapChars.wrap(node, {className: 'wrapped'});
     </script>
 

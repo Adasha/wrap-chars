@@ -1,7 +1,7 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.5
+ * @version 2.3
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -161,3 +161,5 @@ class WrapChars
 
 
 }
+
+export default WrapChars;
