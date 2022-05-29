@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.2.5
+V2.3.0a1
 
 ## Contents
 
@@ -19,7 +19,6 @@ Version 1 of this was very blunt in its approach, stripping out any nested tags 
 
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
-Note: There was a long-standing issue where spaces would be 'undefined' if a spaceChar was not explicitly set, thanks to an oversight in the tests. This is fixed in 2.2.5.
 
 ## Setup
 
@@ -42,7 +41,11 @@ Ensure the DOM has loaded completely before continuing.
 
 ### npm/browserify/webpack etc
 
-tbc
+You can also import wrap-chars as an ES6 module. This is an early implementation and not ready for real-world use.
+
+```
+import WrapChars from './path/to/WrapChars.min.mjs';
+```
 
 ## Use
 
@@ -129,7 +132,7 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.2.5 - Fixed undefined spaceChar bug.
+- v2.3   - Added ES6 modular versions.
 - v2.2   - Added *wrapSpaces* property, renamed *type* to *split*.
 - v2.1   - Added *deep* and *skipClass* properties, improved whitespace handling.
 - v2.0   - Near complete rewrite to play nicer with other people's markup
