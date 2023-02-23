@@ -7,8 +7,6 @@
 // eslint-disable-next-line no-unused-vars
 class WrapChars
 {
-
-
     /**
      * wrap()
      * Wrap inline text characters/words with HTML elements.

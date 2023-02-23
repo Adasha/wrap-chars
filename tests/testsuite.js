@@ -1,5 +1,7 @@
 (function(){
     
+    document.getElementById('version_info').innerText = "version info to go here";
+
 
     /*
      * Markup handling
