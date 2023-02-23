@@ -1,12 +1,13 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.2.5
+ * @version 2.3.0a1
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
 class WrapChars
 {
+
     /**
      * wrap()
      * Wrap inline text characters/words with HTML elements.
@@ -50,10 +51,6 @@ class WrapChars
             let e = document.createElement("span");
             e.innerHTML = str;
             let txt = e.textContent;
-            // txt = txt.replace(/&/g, '&amp;'); // "
-            // txt = txt.replace(/</g, '&lt;'); // <
-            // txt = txt.replace(/>/g, '&gt;'); // >
-            // txt = txt.replace(/"/g, '&quot;'); // "
             
             return txt;
         }
@@ -71,8 +68,6 @@ class WrapChars
             switch(node.nodeType)
             {
                 case 1 : //element
-                    // console.log(node + ': ' + node.children.length +' / '+ node.childNodes.length);
-
                     if(skipClass && node.classList.contains(skipClass))
                     {
                         break;
@@ -87,6 +82,7 @@ class WrapChars
                         }
                     }
                     break;
+
                 case 3 : //text
                     t = node.textContent;
                     if(!t.replace(/\s\s+/g, "").length)
@@ -95,7 +91,6 @@ class WrapChars
                         break;
                     }
 
-                    // t = t.trimStart().trimEnd();
                     t = t.replace(/\s\s+/g, " ");
                     
                     n = document.createElement("span");
