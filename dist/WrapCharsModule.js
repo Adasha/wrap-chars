@@ -19,7 +19,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.3
+ * @version 2.3.0a1
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
@@ -68,11 +68,6 @@ var WrapChars = /*#__PURE__*/function () {
         var e = document.createElement("span");
         e.innerHTML = str;
         var txt = e.textContent;
-        // txt = txt.replace(/&/g, '&amp;'); // "
-        // txt = txt.replace(/</g, '&lt;'); // <
-        // txt = txt.replace(/>/g, '&gt;'); // >
-        // txt = txt.replace(/"/g, '&quot;'); // "
-
         return txt;
       }
 
@@ -86,8 +81,6 @@ var WrapChars = /*#__PURE__*/function () {
         switch (node.nodeType) {
           case 1:
             //element
-            // console.log(node + ': ' + node.children.length +' / '+ node.childNodes.length);
-
             if (skipClass && node.classList.contains(skipClass)) {
               break;
             }
@@ -105,8 +98,6 @@ var WrapChars = /*#__PURE__*/function () {
               //node only contains whitespace
               break;
             }
-
-            // t = t.trimStart().trimEnd();
             t = t.replace(/\s\s+/g, " ");
             n = document.createElement("span");
             n.innerHTML = _wrap(t);

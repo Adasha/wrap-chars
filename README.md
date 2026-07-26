@@ -17,6 +17,8 @@ Tiny script containing just one, static method that takes any element and wraps 
 
 Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. This version is much more polite, and will do its best to preserve existing markup. It has several ways to control the wrapping process.
 
+From v2.3 also implemented as a module. In progress.
+
 [Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
 
 
