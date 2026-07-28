@@ -29,7 +29,7 @@ class WrapChars
         // validate tag name
         const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
         const DISALLOWED    = new Set(["script","style","iframe","object","embed"]);
-        if(VOID_ELEMENTS.has(tagName) || DISALLOWED.has(tagName))
+        if(VOID_ELEMENTS.has(params.tagName) || DISALLOWED.has(params.tagName))
         {
             throw new Error(`WrapChars: invalid tagName "${tagName}"`);
         }
@@ -39,7 +39,7 @@ class WrapChars
             tagName = params.tagName || "span",
             className = params.className,
             spaceChar = _sanitiseSpaceChar(params.spaceChar),
-            deep = params.hasOwnProperty("deep") ? params.deep : true,
+            deep = Object.hasOwn(params, "deep") ? params.deep : true,
             skipClass = params.skipClass,
             wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
 
