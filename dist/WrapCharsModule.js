@@ -1,21 +1,3 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
@@ -23,125 +5,115 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
  * @author Adam Shailer <adasha76@outlook.com>
 */
 // eslint-disable-next-line no-unused-vars
-var WrapChars = /*#__PURE__*/function () {
-  function WrapChars() {
-    _classCallCheck(this, WrapChars);
-  }
-  _createClass(WrapChars, null, [{
-    key: "wrap",
-    value:
+class WrapChars {
+  /**
+   * wrap()
+   * Wrap inline text characters/words with HTML elements.
+   * 
+   * @param {Element} element - A reference to a DOM element.
+   * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
+   * @param {string} [params.split="letter"] - The method by which text will be divided. "letter"|"word". This property was previously called `type` - `type` still exists as an alias but is deprecated.
+   * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
+   * @param {string} [params.className] - An optional class name to add to each element.
+   * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+   * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters, including spaceChar if specified.
+   * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
+   * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. Will be sanitised to standard text internally.
+   * @method
+   * @static
+   */
+  static wrap(element, params = {}) {
+    let split = params.split || params.type || "letter",
+      tagName = params.tagName || "span",
+      className = params.className,
+      spaceChar = _sanitiseSpaceChar(params.spaceChar),
+      deep = params.hasOwnProperty("deep") ? params.deep : true,
+      skipClass = params.skipClass,
+      wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
+    _parseNode(element);
+
     /**
-     * wrap()
-     * Wrap inline text characters/words with HTML elements.
+     * _sanitiseSpaceChar()
      * 
-     * @param {Element} element - A reference to a DOM element.
-     * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
-     * @param {string} [params.split="letter"] - The method by which text will be divided. "letter"|"word". This property was previously called `type` - `type` still exists as an alias but is deprecated.
-     * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
-     * @param {string} [params.className] - An optional class name to add to each element.
-     * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
-     * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters, including spaceChar if specified.
-     * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
-     * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. Will be sanitised to standard text internally.
-     * @method
-     * @static
+     * @param {string} str 
+     * @returns {string}
      */
-    function wrap(element) {
-      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var split = params.split || params.type || "letter",
-        tagName = params.tagName || "span",
-        className = params.className,
-        spaceChar = _sanitiseSpaceChar(params.spaceChar),
-        deep = params.hasOwnProperty("deep") ? params.deep : true,
-        skipClass = params.skipClass,
-        wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
-      _parseNode(element);
+    function _sanitiseSpaceChar(str) {
+      if (!str) return;
+      let e = document.createElement("span");
+      e.innerHTML = str;
+      let txt = e.textContent;
+      return txt;
+    }
 
-      /**
-       * _sanitiseSpaceChar()
-       * 
-       * @param {string} str 
-       * @returns {string}
-       */
-      function _sanitiseSpaceChar(str) {
-        if (!str) return;
-        var e = document.createElement("span");
-        e.innerHTML = str;
-        var txt = e.textContent;
-        return txt;
-      }
-
-      /**
-       * _parseNode()
-       * 
-       * @param {HTMLElement} node - The node to process.
-       */
-      function _parseNode(node) {
-        var n, t;
-        switch (node.nodeType) {
-          case 1:
-            //element
-            if (skipClass && node.classList.contains(skipClass)) {
-              break;
-            }
-            n = node.childNodes;
-            for (var i = n.length; i > 0; i--) {
-              if (deep || n[i - 1].nodeType === 3) {
-                _parseNode(n[i - 1]);
-              }
-            }
+    /**
+     * _parseNode()
+     * 
+     * @param {HTMLElement} node - The node to process.
+     */
+    function _parseNode(node) {
+      let n, t;
+      switch (node.nodeType) {
+        case 1:
+          //element
+          if (skipClass && node.classList.contains(skipClass)) {
             break;
-          case 3:
-            //text
-            t = node.textContent;
-            if (!t.replace(/\s\s+/g, "").length) {
-              //node only contains whitespace
-              break;
+          }
+          n = node.childNodes;
+          for (let i = n.length; i > 0; i--) {
+            if (deep || n[i - 1].nodeType === 3) {
+              _parseNode(n[i - 1]);
             }
-            t = t.replace(/\s\s+/g, " ");
-            n = document.createElement("span");
-            n.innerHTML = _wrap(t);
-            node.replaceWith.apply(node, _toConsumableArray(n.childNodes));
+          }
+          break;
+        case 3:
+          //text
+          t = node.textContent;
+          if (!t.replace(/\s\s+/g, "").length) {
+            //node only contains whitespace
             break;
-          default:
-          //unsupported node type
-        }
-      }
-
-      /**
-       * _wrap()
-       * 
-       * @param {string} text - The text to wrap.
-       * @returns {string} The processed HTML string.
-       */
-      function _wrap(text) {
-        var delimiter = split === "word" ? " " : "",
-          chars = text.split(delimiter),
-          rslt = "";
-
-        //restore spaces if split type = 'word'
-        if (split === "word") {
-          for (var i = chars.length; i > 1; i--) {
-            chars.splice(i - 1, 0, " ");
           }
-        }
-        for (var _char = 0; _char < chars.length; _char++) {
-          var letter = chars[_char] === " " && spaceChar ? spaceChar : chars[_char],
-            str = "";
-          if (!wrapSpaces && (letter === " " || letter === spaceChar)) {
-            str += spaceChar || " ";
-          } else if (letter.length) {
-            str += "<".concat(tagName);
-            if (className && typeof className === 'string' && className.length) str += " class=\"".concat(className, "\"");
-            str += ">" + letter + "</".concat(tagName, ">");
-          }
-          rslt += str;
-        }
-        return rslt;
+          t = t.replace(/\s\s+/g, " ");
+          n = document.createElement("span");
+          n.innerHTML = _wrap(t);
+          node.replaceWith(...n.childNodes);
+          break;
+        default:
+        //unsupported node type
       }
     }
-  }]);
-  return WrapChars;
-}();
-var _default = WrapChars;
-exports["default"] = _default;
+
+    /**
+     * _wrap()
+     * 
+     * @param {string} text - The text to wrap.
+     * @returns {string} The processed HTML string.
+     */
+    function _wrap(text) {
+      let delimiter = split === "word" ? " " : "",
+        chars = text.split(delimiter),
+        rslt = "";
+
+      //restore spaces if split type = 'word'
+      if (split === "word") {
+        for (let i = chars.length; i > 1; i--) {
+          chars.splice(i - 1, 0, " ");
+        }
+      }
+      for (let char = 0; char < chars.length; char++) {
+        let letter = chars[char] === " " && spaceChar ? spaceChar : chars[char],
+          str = "";
+        if (!wrapSpaces && (letter === " " || letter === spaceChar)) {
+          str += spaceChar || " ";
+        } else if (letter.length) {
+          str += `<${tagName}`;
+          if (className && typeof className === 'string' && className.length) str += ` class="${className}"`;
+          str += `>` + letter + `</${tagName}>`;
+        }
+        rslt += str;
+      }
+      return rslt;
+    }
+  }
+}
+export default WrapChars;

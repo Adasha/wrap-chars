@@ -15,11 +15,11 @@ class WrapChars
      * @param {Element} element - A reference to a DOM element.
      * @param {Object} [params={}] - An object containing key/value pairs used to configure the method.
      * @param {string} [params.split="letter"] - The method by which text will be divided. "letter"|"word". This property was previously called `type` - `type` still exists as an alias but is deprecated.
-     * @param {string} [params.tagName="span"] - The name of the element to wrap each character in.
+     * @param {string} [params.tagName="span"] - The name of the element to wrap each character in, defaults to <span>.
      * @param {string} [params.className] - An optional class name to add to each element.
-     * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements.
+     * @param {boolean} [params.deep=true] - Whether to also wrap the text within nested elements. Default is true.
      * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters, including spaceChar if specified.
-     * @param {string} [params.skipClass=false] - If provided, will pass over any elements with that class. 
+     * @param {string} [params.skipClass] - If provided, will pass over any elements with that class. 
      * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. Will be sanitised to standard text internally.
      * @method
      * @static
