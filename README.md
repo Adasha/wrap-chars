@@ -1,7 +1,7 @@
 
 # WrapChars.js
 
-V2.3.1a1
+V2.4.0a1 *dist builds are behind, don't use
 
 ## Contents
 
@@ -134,7 +134,7 @@ WrapChars.wrap(myElement, {
 
 ## Version history
 
-- v2.3.1 - Stability and security enhancements.
+- v2.4   - Hardened codebase.
 - v2.3   - Added ES6 modular versions.
 - v2.2   - Added *wrapSpaces* property, renamed *type* to *split*.
 - v2.1   - Added *deep* and *skipClass* properties, improved whitespace handling.
@@ -143,4 +143,4 @@ WrapChars.wrap(myElement, {
 
 ## AI usage disclosure
 
-This project is proudly hand-scripted. AI has been used to aid in bug fixing, but all AI contributions are manually validated.
+This project is proudly hand-scripted. AI has been used to aid in bug fixing and exploit hunting, but all AI contributions are manually validated.
