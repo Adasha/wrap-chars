@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.3.0a1",
+  "version": "2.3.1a1",
   "type": "module",
   "description": "Individually wrap inline characters/words in a chosen element, with an optional class.",
   "author": {
