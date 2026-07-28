@@ -4,7 +4,7 @@
  * @version 2.3.0a1
  * @author Adam Shailer <adasha76@outlook.com>
 */
-// eslint-disable-next-line no-unused-vars
+
 class WrapChars
 {
 
@@ -26,6 +26,12 @@ class WrapChars
      */
     static wrap(element, params = {})
     {
+        if (!(element instanceof Element))
+        {
+            throw new TypeError("WrapChars.wrap: element must be a DOM Element");
+        }
+
+
         // validate tag name
         const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
         const DISALLOWED    = new Set(["script","style","iframe","object","embed"]);
@@ -35,13 +41,13 @@ class WrapChars
         }
 
 
-        let split = params.split || params.type || "letter",
-            tagName = params.tagName || "span",
-            className = params.className,
-            spaceChar = _sanitiseSpaceChar(params.spaceChar),
-            deep = Object.hasOwn(params, "deep") ? params.deep : true,
-            skipClass = params.skipClass,
-            wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
+        const split = params.split || params.type || "letter";
+        const tagName = params.tagName || "span";
+        const className = params.className;
+        const spaceChar = _sanitiseSpaceChar(params.spaceChar);
+        const deep = Object.hasOwn(params, "deep") ? params.deep : true;
+        const skipClass = params.skipClass;
+        const wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
 
 
         _parseNode(element);
@@ -55,13 +61,11 @@ class WrapChars
          */
         function _sanitiseSpaceChar(str)
         {
-            if (!str) return;
+            if (!str) return undefined;
 
-            let e = document.createElement("span");
+            const e = document.createElement("textarea");
             e.innerHTML = str;
-            let txt = e.textContent;
-            
-            return txt;
+            return e.value;
         }
 
 
@@ -78,10 +82,7 @@ class WrapChars
             switch(node.nodeType)
             {
                 case 1 : //element
-                    if(skipClass && node.classList.contains(skipClass))
-                    {
-                        break;
-                    }
+                    if(skipClass && node.classList.contains(skipClass)) break; // ignore this node
 
                     n = node.childNodes;
                     for(let i=n.length; i>0; i--)
@@ -96,14 +97,9 @@ class WrapChars
 
                 case 3 : //text
                     t = node.textContent;
-                    if(!t.replace(/\s\s+/g, "").length)
-                    {
-                        //node only contains whitespace
-                        break;
-                    }
+                    if (!t.trim().length) break; //node only contains whitespace
 
                     t = t.replace(/\s\s+/g, " ");
-
                     node.replaceWith(_wrap(t));
 
                     break;
