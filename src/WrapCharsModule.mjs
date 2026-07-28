@@ -26,6 +26,15 @@ class WrapChars
      */
     static wrap(element, params = {})
     {
+        // validate tag name
+        const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
+        const DISALLOWED    = new Set(["script","style","iframe","object","embed"]);
+        if(VOID_ELEMENTS.has(tagName) || DISALLOWED.has(tagName))
+        {
+            throw new Error(`WrapChars: invalid tagName "${tagName}"`);
+        }
+
+
         let split = params.split || params.type || "letter",
             tagName = params.tagName || "span",
             className = params.className,
@@ -59,6 +68,7 @@ class WrapChars
         
         /**
          * _parseNode()
+         * Recursively traverse the node tree to isolate and wrap text nodes.
          * 
          * @param {HTMLElement} node - The node to process.
          */
@@ -81,6 +91,7 @@ class WrapChars
                             _parseNode(n[i-1]);
                         }
                     }
+
                     break;
 
                 case 3 : //text
@@ -96,10 +107,12 @@ class WrapChars
                     node.replaceWith(_wrap(t));
 
                     break;
+
                 default:
                     //unsupported node type
+
             }
-            
+
         }
 
 
