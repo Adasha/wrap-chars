@@ -142,19 +142,14 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <button id="btn_apply">Apply</button>
+                    <button type="button" id="btn_apply">Apply</button>
                 </td>
             </tr>
 
         </table>
 
-
     </aside>
 
-
-    <aside class="info">
-        <p id="version_info"></p>
-    </aside>
 
 
 	<script type="module">
@@ -205,21 +200,10 @@
         }
 
 
-
         controls.btnApply.dispatchEvent(new MouseEvent('click'));
-
 
     </script>
 
-
-
-    <script>
-
-        let info = document.querySelector("*.info");
-        info.innerHTML = `
-        `;
-
-	</script>
 
 </body>
 </html>

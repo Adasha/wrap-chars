@@ -92,65 +92,48 @@ class WrapChars
                     }
 
                     t = t.replace(/\s\s+/g, " ");
-                    
-                    n = document.createElement("span");
-                    n.innerHTML = _wrap(t);
-                    node.replaceWith(...n.childNodes);
+
+                    node.replaceWith(_wrap(t));
 
                     break;
                 default:
                     //unsupported node type
             }
+            
         }
 
 
         /**
          * _wrap()
+         * Private method for constructing output.
          * 
          * @param {string} text - The text to wrap.
          * @returns {string} The processed HTML string.
          */
-        function _wrap(text)
-        {
-            let delimiter = split==="word" ? " " : "",
-                chars = text.split(delimiter),
-                rslt = "";
-            
-            //restore spaces if split type = 'word'
-            if(split==="word")
-            {
-                for (let i=chars.length; i>1; i--)
-                {
-                    chars.splice(i-1, 0, " ");
+        function _wrap(text) {
+            const frag = document.createDocumentFragment();
+            const parts = split === "word" ? text.split(/(?<=\s)|(?=\s)/) : [...text];
+
+            for (const part of parts) {
+                const isSpace = part === " ";
+                if (isSpace && !wrapSpaces) {
+                    frag.appendChild(document.createTextNode(spaceChar || part));
+                    continue;
                 }
+                if (!part.length) continue;
+
+                const el = document.createElement(tagName);
+                if (className) el.className = className;
+                el.textContent = isSpace ? (spaceChar || part) : part;
+                frag.appendChild(el);
             }
 
-            for(let char=0; char<chars.length; char++)
-            {
-                let letter = (chars[char]===" " && spaceChar) ? spaceChar : chars[char],
-                    str    = "";
+            return frag;
 
-                if(!wrapSpaces && (letter===" " || letter===spaceChar))
-                {
-                    str += spaceChar || " ";
-                }
-                else if(letter.length)
-                {
-                    str += `<${tagName}`;
-                    if(className && typeof className==='string' && className.length) str += ` class="${className}"`;
-                    str += `>` + letter + `</${tagName}>`;
-                }
-                
-
-                rslt += str;
-            }
-
-            return rslt;
         }
 
 
     }
-
 
 
 }
