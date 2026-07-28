@@ -1,8 +1,9 @@
 <!doctype html>
-<html>
+<html lang="en-GB">
 <head>
 	<meta charset="utf-8">
-	<title>wrap-chars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>wrap-chars test suite</title>
     <link rel="stylesheet" href="testsuite.css">
 
 </head>
@@ -65,7 +66,7 @@
             
             <br>
             
-            <span class="line">This text includes non-breaking&nbsp;spaces and en-width&ensp;spaces.</span>
+            <span class="line">This text includes&nbsp;non-breaking&nbsp;spaces and&ensp;en-width&ensp;spaces.</span>
             
             <br>
 
@@ -74,6 +75,8 @@
         </blockquote>
     
     </main>
+
+
 
     <aside id="controls">
 
@@ -151,16 +154,66 @@
 
     <aside class="info">
         <p id="version_info"></p>
-    
     </aside>
 
 
-	<script src="../src/WrapChars.js"></script>
-	<script src="testsuite.js"></script>
-	<script>
+	<script type="module">
+        
+        import WrapChars from '../src/WrapCharsModule.mjs';
+        
+
+        const target = document.getElementById('target');
+        const originalHTML = target.innerHTML;
+        const controlBlock = document.getElementById('controls');
+
+
+        var controls = {
+            selSplit: document.getElementById('sel_split'),
+            txtTag:   document.getElementById('txt_tag'),
+            txtClass: document.getElementById('txt_class'),
+            txtSkip:  document.getElementById('txt_skip'),
+            txtSpace: document.getElementById('txt_space'),
+            cbDeep:   document.getElementById('cb_deep'),
+            cbSpaces: document.getElementById('cb_spaces'),
+            btnApply: document.getElementById('btn_apply')
+        };
+
+        controls.btnApply.addEventListener('click', clickApply);
+
+
+        function clickApply(e)
+        {
+            restoreOriginalMarkup();
+
+            let params = {
+                split:       controls.selSplit.value,
+                tagName:     controls.txtTag.value,
+                className:   controls.txtClass.value,
+                skipClass:   controls.txtSkip.value,
+                spaceChar:   controls.txtSpace.value,
+                deep:        controls.cbDeep.checked,
+                wrapSpaces:  controls.cbSpaces.checked
+            };
+
+            WrapChars.wrap(target, params);
+        }
+
+
+        function restoreOriginalMarkup()
+        {
+            target.innerHTML = originalHTML;
+        }
 
 
 
+        controls.btnApply.dispatchEvent(new MouseEvent('click'));
+
+
+    </script>
+
+
+
+    <script>
 
         let info = document.querySelector("*.info");
         info.innerHTML = `
