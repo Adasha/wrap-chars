@@ -31,7 +31,7 @@ class WrapChars
         const DISALLOWED    = new Set(["script","style","iframe","object","embed"]);
         if(VOID_ELEMENTS.has(params.tagName) || DISALLOWED.has(params.tagName))
         {
-            throw new Error(`WrapChars: invalid tagName "${tagName}"`);
+            throw new Error(`WrapChars: invalid tagName "${params.tagName}"`);
         }
 
 
