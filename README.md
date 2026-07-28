@@ -10,6 +10,7 @@ V2.3.0a1
 - [Use](#use)
 - [Known issues](#known-issues)
 - [Version history](#version-history)
+- [AI usage disclosure](#ai-usage-disclosure)
 
 ## About
 
@@ -139,3 +140,7 @@ WrapChars.wrap(myElement, {
 - v2.1   - Added *deep* and *skipClass* properties, improved whitespace handling.
 - v2.0   - Near complete rewrite to play nicer with other people's markup
 - v1.0   - Original version
+
+## AI usage disclosure
+
+This project is proudly hand-scripted. AI has been used to aid in bug fixing, but all AI contributions are manually validated.
