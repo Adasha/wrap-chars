@@ -1,9 +1,19 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.3.0a1
+ * @version 2.4.0a1
  * @author Adam Shailer <adasha76@outlook.com>
 */
+
+// unpermitted tags: void for nonsensical usage, disallowed for security risks
+const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
+const DISALLOWED_TAGS    = new Set(["script","style","iframe","object","embed"]);
+
+// never go deep on these tags:
+const SKIP_DESCEND_TAGS = new Set(["script", "style", "textarea", "noscript", "template"]);
+
+const VALID_SPLIT_MODES = new Set(["letter", "word"]);
+
 
 class WrapChars
 {
@@ -33,114 +43,138 @@ class WrapChars
 
 
         // validate tag name
-        const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
-        const DISALLOWED    = new Set(["script","style","iframe","object","embed"]);
-        if(VOID_ELEMENTS.has(params.tagName) || DISALLOWED.has(params.tagName))
+        const tagName = String(params.tagName || "span").toLowerCase();
+
+        if(VOID_ELEMENTS.has(tagName) || DISALLOWED_TAGS.has(tagName))
         {
-            throw new Error(`WrapChars: invalid tagName "${params.tagName}"`);
+            throw new Error(`WrapChars: invalid tagName "${tagName}"`);
         }
 
 
         const split = params.split || params.type || "letter";
-        const tagName = params.tagName || "span";
-        const className = params.className;
-        const spaceChar = _sanitiseSpaceChar(params.spaceChar);
-        const deep = Object.hasOwn(params, "deep") ? params.deep : true;
-        const skipClass = params.skipClass;
-        const wrapSpaces = params.hasOwnProperty("wrapSpaces") ? params.wrapSpaces : false;
-
-
-        _parseNode(element);
-
-
-        /**
-         * _sanitiseSpaceChar()
-         * 
-         * @param {string} str 
-         * @returns {string}
-         */
-        function _sanitiseSpaceChar(str)
+         if (!VALID_SPLIT_MODES.has(split))
         {
-            if (!str) return undefined;
-
-            const e = document.createElement("textarea");
-            e.innerHTML = str;
-            return e.value;
+            console.warn(`WrapChars: unrecognised split mode "${split}", falling back to "letter"`);
         }
 
 
-        
-        /**
-         * _parseNode()
-         * Recursively traverse the node tree to isolate and wrap text nodes.
-         * 
-         * @param {HTMLElement} node - The node to process.
-         */
-        function _parseNode(node)
-        {
-            let n, t;
-            switch(node.nodeType)
-            {
-                case 1 : //element
-                    if(skipClass && node.classList.contains(skipClass)) break; // ignore this node
+        const config = {
+            split: VALID_SPLIT_MODES.has(split) ? split : "letter",
+            tagName,
+            className: params.className,
+            spaceChar: WrapChars.#sanitiseSpaceChar(params.spaceChar),
+            deep: Object.hasOwn(params, "deep") ? params.deep : true,
+            skipClass: params.skipClass,
+            wrapSpaces: Object.hasOwn(params, "wrapSpaces") ? params.wrapSpaces : false,
+        };
 
-                    n = node.childNodes;
-                    for(let i=n.length; i>0; i--)
+
+        WrapChars.#parseNode(element, config);
+    }
+
+
+
+    /**
+     * #sanitiseSpaceChar()
+     * Ensures any provided text contains no markup.
+     * 
+     * @param {string} str 
+     * @returns {string|undefined}
+     */
+    static #sanitiseSpaceChar(str)
+    {
+        if (!str) return undefined;
+
+        const e = document.createElement("textarea");
+        e.innerHTML = str;
+        return e.value;
+    }
+
+
+    
+    /**
+     * #parseNode()
+     * Recursively traverse the node tree to isolate and wrap text nodes.
+     * 
+     * @param {HTMLElement} node - The node to process.
+     * @param {Object} config - Passed parameters.
+     */
+    static #parseNode(node, config)
+    {
+        switch(node.nodeType)
+        {
+            case Node.ELEMENT_NODE : //element
+                const tag = node.tagName.toLowerCase();
+
+                // Don't parse script/style/textarea/etc
+                if (SKIP_DESCEND_TAGS.has(tag)) break;
+
+                if(config.skipClass && node.classList.contains(config.skipClass)) break; // ignore this node
+
+                const children = node.childNodes;
+                for(let i=children.length; i>0; i--)
+                {
+                    const child = children[i-1];
+                    if(config.deep || child.nodeType === Node.TEXT_NODE)
                     {
-                        if(deep || n[i-1].nodeType===3)
-                        {
-                            _parseNode(n[i-1]);
-                        }
+                        WrapChars.#parseNode(child, config);
                     }
-
-                    break;
-
-                case 3 : //text
-                    t = node.textContent;
-                    if (!t.trim().length) break; //node only contains whitespace
-
-                    t = t.replace(/\s\s+/g, " ");
-                    node.replaceWith(_wrap(t));
-
-                    break;
-
-                default:
-                    //unsupported node type
-
-            }
-
-        }
-
-
-        /**
-         * _wrap()
-         * Private method for constructing output.
-         * 
-         * @param {string} text - The text to wrap.
-         * @returns {string} The processed HTML string.
-         */
-        function _wrap(text) {
-            const frag = document.createDocumentFragment();
-            const parts = split === "word" ? text.split(/(?<=\s)|(?=\s)/) : [...text];
-
-            for (const part of parts) {
-                const isSpace = part === " ";
-                if (isSpace && !wrapSpaces) {
-                    frag.appendChild(document.createTextNode(spaceChar || part));
-                    continue;
                 }
-                if (!part.length) continue;
 
-                const el = document.createElement(tagName);
-                if (className) el.className = className;
-                el.textContent = isSpace ? (spaceChar || part) : part;
-                frag.appendChild(el);
-            }
+                break;
 
-            return frag;
+            case Node.TEXT_NODE : //text
+                let text = node.textContent;
+                if (!text.trim().length) break; //node only contains whitespace
+
+                text = text.replace(/\s\s+/g, " ");
+                node.replaceWith( WrapChars.#wrap(text, config) );
+
+                break;
+
+            default:
+                //unsupported node type
+                break;
 
         }
 
+    }
+
+
+    /**
+     * #wrap()
+     * Private method for constructing output.
+     * 
+     * @param {string} text - The text to wrap.
+     * @param {Object} config
+     * @returns {DocumentFragment} The processed HTML string.
+     */
+    static #wrap(text, config)
+    {
+        const frag = document.createDocumentFragment();
+        const parts = config.split === "word" 
+            ? text.split(/(?<=\s)|(?=\s)/) 
+            : [...text];
+
+        for (const part of parts) {
+            if (!part.length) continue;
+
+            // const isSpace = part === " ";
+            const isSpace = /^\s$/.test(part);
+
+            if (isSpace && !config.wrapSpaces)
+            {
+                frag.appendChild(document.createTextNode(config.spaceChar || part));
+                continue;
+            }
+
+            const el = document.createElement(config.tagName);
+            if (config.className) el.className = config.className;
+            el.textContent = isSpace ? (config.spaceChar || part) : part;
+            frag.appendChild(el);
+        }
+
+        return frag;
 
     }
 
@@ -148,3 +182,4 @@ class WrapChars
 }
 
 export default WrapChars;
+export { WrapChars };
