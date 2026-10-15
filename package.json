@@ -1,6 +1,6 @@
 {
   "name": "wrap-chars",
-  "version": "2.4.0a1",
+  "version": "2.4.0",
   "type": "module",
   "description": "Individually wrap inline characters/words in a chosen element, with an optional class.",
   "author": {
@@ -10,17 +10,16 @@
   },
   "license": "LGPL-3.0",
   "exports": {
-    ".": {
-      "browser": {
-        "default": "./dist/WrapChars.min.js"
-      }
-    }
+    ".": "./dist/wrap-chars.mjs",
+    "./package.json": "./package.json"
   },
-  "browser": "./dist/WrapChars.min.js",
-  "unpkg": "./dist/WrapChars.min.js",
-  "directories": {
-    "test": "tests"
-  },
+  "module": "./dist/wrap-chars.mjs",
+  "unpkg": "./dist/wrap-chars.min.js",
+  "jsdelivr": "./dist/wrap-chars.min.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "keywords": [
     "text",
     "characters",
@@ -65,18 +64,15 @@
     "email": "adasha76@outlook.com"
   },
   "devDependencies": {
-    "@babel/cli": "^8.0.4",
-    "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
+    "@eslint/js": "^10.0.1",
+    "esbuild": "^0.28.2",
     "eslint": "^10.8.0",
-    "gulp": "^5.0.1",
-    "gulp-babel": "^8.1.0",
-    "gulp-gzip": "^1.4.2",
-    "gulp-rename": "^2.1.0",
-    "gulp-uglify": "^3.0.2"
+    "globals": "^17.13.0"
   },
   "scripts": {
-    "build": "gulp build:js && gulp build:mjs",
+    "build": "node scripts/build.js",
+    "lint": "eslint .",
+    "prepack": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

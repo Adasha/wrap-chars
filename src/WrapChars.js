@@ -104,6 +104,7 @@ class WrapChars
         switch(node.nodeType)
         {
             case Node.ELEMENT_NODE : //element
+            {
                 const tag = node.tagName.toLowerCase();
 
                 // Don't parse script/style/textarea/etc
@@ -122,8 +123,10 @@ class WrapChars
                 }
 
                 break;
+            }
 
             case Node.TEXT_NODE : //text
+            {
                 let text = node.textContent;
                 if (!text.trim().length) break; //node only contains whitespace
 
@@ -131,6 +134,7 @@ class WrapChars
                 node.replaceWith( WrapChars.#wrap(text, config) );
 
                 break;
+            }
 
             default:
                 //unsupported node type
