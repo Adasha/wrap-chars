@@ -7,12 +7,18 @@ export default [
     js.configs.recommended,
 
     {
-        files: ["src/**/*.js", "tests/**/*.js"],
+        files: ["src/**/*.js"],
         languageOptions: { globals: globals.browser },
     },
 
     {
-        files: ["scripts/**/*.js", "eslint.config.js"],
+        // Tests run in Node with a jsdom-provided browser environment.
+        files: ["tests/**/*.js"],
+        languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    },
+
+    {
+        files: ["scripts/**/*.js", "*.config.js"],
         languageOptions: { globals: globals.node },
     },
 ];

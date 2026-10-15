@@ -67,12 +67,15 @@
     "@eslint/js": "^10.0.1",
     "esbuild": "^0.28.2",
     "eslint": "^10.8.0",
-    "globals": "^17.13.0"
+    "globals": "^17.13.0",
+    "jsdom": "^28.1.0",
+    "vitest": "^5.0.5"
   },
   "scripts": {
     "build": "node scripts/build.js",
     "lint": "eslint .",
     "prepack": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   }
 }
