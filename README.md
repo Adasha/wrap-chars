@@ -88,7 +88,7 @@ lines.forEach (line => WrapChars.wrap (line));
 
 Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
 
-Any whitespace is reduced down to a single space. Text nodes containing only whitespace are ignored completely.
+Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space, matching how browsers render them. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely.
 
 ### Configuration
 
@@ -105,13 +105,13 @@ The `params` object can contain the following properties, all optional:
 
 | Property | Type | Description |
 | --- | --- | --- |
-| `split` | string | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `"letter"` or `"word"`. Default is `"letter"`. `split` replaces `type` since v2.2, though `type` still exists as an alias. |
+| `split` | string | Defines how text nodes will be subdivided for wrapping. Currently takes a value of `"letter"` or `"word"`. Default is `"letter"`. Any other value throws a `RangeError`. (`split` replaced `type` in v2.2; the `type` alias was removed in v3 and now throws.) |
 | `tagName` | string | The type of element that will be wrapped around each character. Default is `"span"`. |
 | `className` | string | The class name that can be applied to each wrapped element. Default is *undefined*. |
 | `deep` | Boolean | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
 | `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. If a value is set for `spaceChar` those characters are also subject to this setting. Default is `false` |
 | `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
-| `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. HTML elements are stripped out, to limit exploits. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
+| `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. Any markup is kept as literal text, never parsed as HTML. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
 
 ##### Example
 

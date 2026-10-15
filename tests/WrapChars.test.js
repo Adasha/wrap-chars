@@ -42,21 +42,15 @@ describe("split", () =>
         expect(wrapHTML("Hello, world!", { split: "word" })).toBe("<span>Hello,</span> <span>world!</span>");
     });
 
-    it("accepts the deprecated `type` alias", () =>
+    it("rejects the removed `type` option with a pointer to `split`", () =>
     {
-        expect(wrapHTML("ab cd", { type: "word" })).toBe("<span>ab</span> <span>cd</span>");
+        expect(() => wrapHTML("ab", { type: "word" })).toThrow(TypeError);
+        expect(() => wrapHTML("ab", { type: "word" })).toThrow(/use "split"/);
     });
 
-    it("prefers `split` over `type`", () =>
+    it("throws RangeError for an unknown mode", () =>
     {
-        expect(wrapHTML("ab", { split: "letter", type: "word" })).toBe("<span>a</span><span>b</span>");
-    });
-
-    it("warns and falls back to 'letter' for an unknown mode", () =>
-    {
-        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-        expect(wrapHTML("ab", { split: "bogus" })).toBe("<span>a</span><span>b</span>");
-        expect(warn).toHaveBeenCalledOnce();
+        expect(() => wrapHTML("ab", { split: "bogus" })).toThrow(RangeError);
     });
 });
 
@@ -155,19 +149,35 @@ describe("whitespace", () =>
         expect(wrapHTML("a \n\t b")).toBe("<span>a</span> <span>b</span>");
     });
 
+    it("normalises a single newline, tab, CR or form feed to a space", () =>
+    {
+        expect(wrapHTML("a\nb")).toBe("<span>a</span> <span>b</span>");
+        expect(wrapHTML("a\tb", { split: "word" })).toBe("<span>a</span> <span>b</span>");
+        expect(wrapHTML("a\rb\fc", { split: "word" })).toBe("<span>a</span> <span>b</span> <span>c</span>");
+    });
+
+    it("treats non-breaking and other Unicode spaces as content", () =>
+    {
+        expect(wrapHTML("a&nbsp;b")).toBe("<span>a</span><span>&nbsp;</span><span>b</span>");
+        expect(wrapHTML("a\u2002b")).toBe("<span>a</span><span>\u2002</span><span>b</span>");
+    });
+
+    it("keeps words joined by a non-breaking space together", () =>
+    {
+        expect(wrapHTML("non&nbsp;breaking words", { split: "word" }))
+            .toBe("<span>non&nbsp;breaking</span> <span>words</span>");
+    });
+
+    it("wraps a text node containing only a non-breaking space", () =>
+    {
+        expect(wrapHTML("<b>&nbsp;</b>")).toBe("<b><span>&nbsp;</span></b>");
+    });
+
     it("wraps spaces with wrapSpaces: true", () =>
     {
         expect(wrapHTML("a b", { wrapSpaces: true })).toBe("<span>a</span><span> </span><span>b</span>");
         expect(wrapHTML("a b", { split: "word", wrapSpaces: true }))
             .toBe("<span>a</span><span> </span><span>b</span>");
-    });
-
-    // Current behaviour, slated for review: a lone non-space whitespace
-    // character isn't normalised to a space.
-    it("[current] leaves a single newline or tab as-is", () =>
-    {
-        expect(wrapHTML("a\nb")).toBe("<span>a</span>\n<span>b</span>");
-        expect(wrapHTML("a\tb", { split: "word" })).toBe("<span>a</span>\t<span>b</span>");
     });
 });
 
@@ -193,11 +203,10 @@ describe("spaceChar", () =>
             .toBe("<span>a</span><span>__</span><span>b</span>");
     });
 
-    // Current behaviour, slated for review: \s matches U+00A0, so authored
-    // non-breaking spaces are treated as ordinary spaces.
-    it("[current] also replaces non-breaking spaces", () =>
+    it("does not replace non-breaking spaces", () =>
     {
-        expect(wrapHTML("a&nbsp;b", { spaceChar: "_" })).toBe("<span>a</span>_<span>b</span>");
+        expect(wrapHTML("a&nbsp;b c", { spaceChar: "_" }))
+            .toBe("<span>a</span><span>&nbsp;</span><span>b</span>_<span>c</span>");
     });
 });
 
@@ -240,25 +249,47 @@ describe("validation", () =>
         (value) => expect(() => WrapChars.wrap(value)).toThrow(TypeError),
     );
 
-    it.each(["img", "br", "input", "script", "SCRIPT", "style", "iframe", "object", "embed"])(
+    it.each([
+        "img", "br", "input", "script", "SCRIPT", "style", "iframe", "object", "embed",
+        "template", "textarea", "title", "noscript", "frame", "frameset",
+    ])(
         "rejects tagName %s",
-        (tagName) => expect(() => wrapHTML("a", { tagName })).toThrow(/invalid tagName/),
+        (tagName) => expect(() => wrapHTML("a", { tagName })).toThrow(RangeError),
     );
 
-    it("rejects tagName before modifying the DOM", () =>
+    it.each(["bad tag", "1a", "<b>", "a>"])(
+        "rejects syntactically invalid tagName %j",
+        (tagName) => expect(() => wrapHTML("a", { tagName })).toThrow(RangeError),
+    );
+
+    it.each([{ tagName: "img" }, { tagName: "bad tag" }, { split: "bogus" }, { type: "word" }])(
+        "validates %j before modifying the DOM",
+        (params) =>
+        {
+            const el = document.createElement("div");
+            el.innerHTML = "a<b>c</b>";
+            expect(() => WrapChars.wrap(el, params)).toThrow();
+            expect(el.innerHTML).toBe("a<b>c</b>");
+        },
+    );
+
+    it("validates tagName even when there is no text to wrap", () =>
     {
-        const el = document.createElement("div");
-        el.innerHTML = "a<b>c</b>";
-        expect(() => WrapChars.wrap(el, { tagName: "img" })).toThrow();
-        expect(el.innerHTML).toBe("a<b>c</b>");
+        expect(() => wrapHTML("  ", { tagName: "bad tag" })).toThrow(RangeError);
     });
 
-    // Current behaviour, slated for review: syntactically invalid names are
-    // only caught by createElement, after some nodes may already be wrapped.
-    it("[current] syntactically invalid tagName throws only once text is found", () =>
+    it("treats null params as defaults", () =>
     {
-        expect(() => wrapHTML("a", { tagName: "bad tag" })).toThrow(DOMException);
-        expect(wrapHTML("  ", { tagName: "bad tag" })).toBe("  ");
+        const el = document.createElement("div");
+        el.textContent = "a";
+        WrapChars.wrap(el, null);
+        expect(el.innerHTML).toBe("<span>a</span>");
+    });
+
+    it("coerces deep and wrapSpaces to booleans", () =>
+    {
+        expect(wrapHTML("a<b>c</b>", { deep: 0 })).toBe("<span>a</span><b>c</b>");
+        expect(wrapHTML("a b", { wrapSpaces: 1 })).toBe("<span>a</span><span> </span><span>b</span>");
     });
 });
 
