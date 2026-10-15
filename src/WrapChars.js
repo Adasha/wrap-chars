@@ -1,7 +1,7 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.4.0
+ * @version 3.0.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 
