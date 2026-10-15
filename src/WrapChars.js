@@ -1,13 +1,13 @@
 /**
  * WrapChars Class - wrap inline letters/words in HTML elements.
  * @class WrapChars
- * @version 2.4.0a1
+ * @version 2.4.0
  * @author Adam Shailer <adasha76@outlook.com>
 */
 
 // unpermitted tags: void for nonsensical usage, disallowed for security risks
-const VOID_ELEMENTS = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
-const DISALLOWED_TAGS    = new Set(["script","style","iframe","object","embed"]);
+const VOID_ELEMENTS     = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
+const DISALLOWED_TAGS   = new Set(["script","style","iframe","object","embed"]);
 
 // never go deep on these tags:
 const SKIP_DESCEND_TAGS = new Set(["script", "style", "textarea", "noscript", "template"]);

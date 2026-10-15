@@ -1,7 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en-GB">
 <head>
 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>wrap-chars</title>
 
     <style>
@@ -77,8 +78,8 @@
 
     </aside>
 
-	<script src="../dist/WrapChars.js"></script>
-	<script>
+	<script type="module">
+        import WrapChars from '../src/WrapChars.js';
 
         let lines = document.querySelectorAll('*.sample');
         
