@@ -165,6 +165,13 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
+                    <input id="cb_a11y" name="cb_a11y" type="checkbox" checked>
+                    <label for="cb_a11y">Accessible (screen-reader copy)</label>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
                     <button type="button" id="btn_apply">Apply</button>
                     <output id="out_error" role="alert"></output>
                 </td>
@@ -196,6 +203,7 @@
             cbSpaces: document.getElementById('cb_spaces'),
             cbPunct:  document.getElementById('cb_punct'),
             txtPunct: document.getElementById('txt_punct'),
+            cbA11y:   document.getElementById('cb_a11y'),
             btnApply: document.getElementById('btn_apply'),
             outError: document.getElementById('out_error')
         };
@@ -216,7 +224,8 @@
                 deep:        controls.cbDeep.checked,
                 wrapSpaces:  controls.cbSpaces.checked,
                 separatePunctuation: controls.cbPunct.checked,
-                punctuationClass:    controls.txtPunct.value
+                punctuationClass:    controls.txtPunct.value,
+                accessible:          controls.cbA11y.checked
             };
 
             controls.outError.value = '';

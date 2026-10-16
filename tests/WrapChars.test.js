@@ -2,12 +2,15 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import WrapChars, { WrapChars as NamedWrapChars } from "../src/WrapChars.js";
 
 
+// Most tests are about how text is split, so the helpers turn off the
+// accessibility markup (tested separately) unless a test asks for it.
+
 /** Build a <div> from `html`, wrap it, and return the resulting markup. */
 function wrapHTML(html, params)
 {
     const el = document.createElement("div");
     el.innerHTML = html;
-    WrapChars.wrap(el, params);
+    WrapChars.wrap(el, { accessible: false, ...params });
     return el.innerHTML;
 }
 
@@ -27,7 +30,7 @@ function pieces(text, params)
 {
     const el = document.createElement("div");
     el.textContent = text;
-    WrapChars.wrap(el, params);
+    WrapChars.wrap(el, { accessible: false, ...params });
     return [...el.childNodes]
         .map(n => n.nodeType === Node.TEXT_NODE ? JSON.stringify(n.data) : `[${n.className}:${n.textContent}]`)
         .join("");
@@ -215,7 +218,7 @@ describe("spaceChar", () =>
     {
         const el = document.createElement("div");
         el.textContent = "a b";
-        WrapChars.wrap(el, { spaceChar: "&nbsp;" });
+        WrapChars.wrap(el, { spaceChar: "&nbsp;", accessible: false });
         expect(el.textContent).toBe("a b");
     });
 
@@ -339,8 +342,8 @@ describe("repeat calls", () =>
     {
         const el = document.createElement("div");
         el.textContent = "a";
-        WrapChars.wrap(el);
-        WrapChars.wrap(el);
+        WrapChars.wrap(el, { accessible: false });
+        WrapChars.wrap(el, { accessible: false });
         expect(el.innerHTML).toBe("<span><span>a</span></span>");
     });
 });
@@ -384,10 +387,12 @@ describe("validation", () =>
 
     it("treats null params as defaults", () =>
     {
-        const el = document.createElement("div");
-        el.textContent = "a";
-        WrapChars.wrap(el, null);
-        expect(el.innerHTML).toBe("<span>a</span>");
+        const a = document.createElement("div");
+        const b = document.createElement("div");
+        a.textContent = b.textContent = "a";
+        WrapChars.wrap(a, null);
+        WrapChars.wrap(b);
+        expect(a.innerHTML).toBe(b.innerHTML);
     });
 
     it("coerces deep and wrapSpaces to booleans", () =>
@@ -404,7 +409,7 @@ describe("security", () =>
     {
         const el = document.createElement("div");
         el.innerHTML = "&lt;img src=x onerror=alert(1)&gt;";
-        WrapChars.wrap(el, { split: "word" });
+        WrapChars.wrap(el, { split: "word", accessible: false });
         expect(el.querySelector("img")).toBeNull();
         expect(el.textContent).toBe("<img src=x onerror=alert(1)>");
     });
@@ -413,7 +418,7 @@ describe("security", () =>
     {
         const el = document.createElement("div");
         el.textContent = "a b";
-        WrapChars.wrap(el, { spaceChar: "<img src=x onerror=alert(1)>" });
+        WrapChars.wrap(el, { spaceChar: "<img src=x onerror=alert(1)>", accessible: false });
         expect(el.querySelector("img")).toBeNull();
         expect(el.textContent).toBe("a<img src=x onerror=alert(1)>b");
     });
@@ -432,9 +437,101 @@ describe("security", () =>
     {
         const el = document.createElement("div");
         el.textContent = "a";
-        WrapChars.wrap(el, { className: '" onclick="alert(1)' });
+        WrapChars.wrap(el, { className: '" onclick="alert(1)', accessible: false });
         const span = el.firstElementChild;
         expect(span.hasAttribute("onclick")).toBe(false);
         expect(span.getAttribute("class")).toBe('" onclick="alert(1)');
+    });
+});
+
+
+describe("accessible", () =>
+{
+    /** Wrap `html` with defaults (accessible on) and return the container. */
+    function wrapAccessible(html, params)
+    {
+        const el = document.createElement("div");
+        el.innerHTML = html;
+        WrapChars.wrap(el, params);
+        return el;
+    }
+
+    const hiddenCopies = el => [...el.querySelectorAll("span:not([aria-hidden])")];
+    const isVisuallyHidden = span =>
+        span.style.position === "absolute" && span.style.clipPath === "inset(50%)"
+        && span.style.userSelect === "none";
+
+    it("is on by default", () =>
+    {
+        const el = wrapAccessible("ab");
+        expect(hiddenCopies(el)).toHaveLength(1);
+    });
+
+    it("adds a visually hidden copy of the text before the pieces", () =>
+    {
+        const el = wrapAccessible("ab c");
+        const copy = el.firstChild;
+        expect(copy.textContent).toBe("ab c");
+        expect(isVisuallyHidden(copy)).toBe(true);
+        expect(copy.hasAttribute("aria-hidden")).toBe(false);
+    });
+
+    it("styles the copy without a style attribute in markup (CSP-safe)", () =>
+    {
+        const setAttribute = vi.spyOn(Element.prototype, "setAttribute");
+        wrapAccessible("a");
+        expect(setAttribute.mock.calls.map(([name]) => name)).not.toContain("style");
+    });
+
+    it("hides every piece, including wrapped spaces and punctuation", () =>
+    {
+        const el = wrapAccessible("a, b", {
+            split: "word", separatePunctuation: true, punctuationClass: "p", wrapSpaces: true,
+        });
+        const pieces = [...el.children].slice(1);
+        expect(pieces.map(p => p.textContent)).toEqual(["a", ",", " ", "b"]);
+        for (const piece of pieces) expect(piece.getAttribute("aria-hidden")).toBe("true");
+    });
+
+    it("hides a decorative spaceChar", () =>
+    {
+        const el = wrapAccessible("a b", { spaceChar: "•" });
+        const bullet = [...el.children].find(c => c.textContent === "•");
+        expect(bullet.tagName).toBe("SPAN");
+        expect(bullet.getAttribute("aria-hidden")).toBe("true");
+        expect(bullet.className).toBe("");
+    });
+
+    it("leaves plain spaces as text", () =>
+    {
+        const el = wrapAccessible("a b");
+        const text = [...el.childNodes].filter(n => n.nodeType === Node.TEXT_NODE);
+        expect(text.map(n => n.data)).toEqual([" "]);
+    });
+
+    it("adds one copy per text node, preserving nested semantics", () =>
+    {
+        const el = wrapAccessible('Go <a href="#">home</a> now');
+        expect(hiddenCopies(el).map(c => c.textContent)).toEqual(["Go ", "home", " now"]);
+        expect(el.querySelector("a").firstChild.textContent).toBe("home");
+    });
+
+    it("uses the original text in the copy, with whitespace collapsed", () =>
+    {
+        const el = wrapAccessible("a \n  b", { spaceChar: "_" });
+        expect(el.firstChild.textContent).toBe("a b");
+    });
+
+    it("keeps markup in the copy as text", () =>
+    {
+        const el = wrapAccessible("&lt;img src=x&gt;");
+        expect(el.querySelector("img")).toBeNull();
+        expect(el.firstChild.textContent).toBe("<img src=x>");
+    });
+
+    it("adds nothing with accessible: false", () =>
+    {
+        const el = wrapAccessible("a b", { accessible: false, spaceChar: "•" });
+        expect(el.innerHTML).toBe("<span>a</span>•<span>b</span>");
     });
 });

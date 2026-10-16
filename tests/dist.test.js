@@ -24,7 +24,7 @@ describe("dist", () =>
 
         const el = document.createElement("div");
         el.textContent = "ab";
-        mod.default.wrap(el);
+        mod.default.wrap(el, { accessible: false });
         expect(el.innerHTML).toBe("<span>a</span><span>b</span>");
     });
 
@@ -39,7 +39,7 @@ describe("dist", () =>
 
         const el = document.createElement("div");
         el.textContent = "ab";
-        globalThis.WrapChars.wrap(el);
+        globalThis.WrapChars.wrap(el, { accessible: false });
         expect(el.innerHTML).toBe("<span>a</span><span>b</span>");
 
         delete globalThis.WrapChars;

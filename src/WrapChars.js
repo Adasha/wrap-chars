@@ -30,6 +30,23 @@ const EDGE_PUNCTUATION = /^(\p{P}*)(.*?)(\p{P}*)$/su;
 // Hyphens between two words are kept as part of the word (well-known).
 const HYPHEN = /^[-\u2010\u2011]$/;
 
+// Hides the screen-reader copy of the text without removing it from the
+// accessibility tree. Applied via CSSOM so it works under a strict CSP.
+// user-select stops the copy being duplicated when the text is copied.
+const VISUALLY_HIDDEN = {
+    position:   "absolute",
+    width:      "1px",
+    height:     "1px",
+    margin:     "-1px",
+    padding:    "0",
+    border:     "0",
+    overflow:   "hidden",
+    clipPath:   "inset(50%)",
+    whiteSpace: "nowrap",
+    userSelect: "none",
+    webkitUserSelect: "none",
+};
+
 
 class WrapChars
 {
@@ -52,6 +69,7 @@ class WrapChars
      * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. HTML entities are decoded; any markup is kept as literal text.
      * @param {boolean} [params.separatePunctuation=false] - Word mode only: split punctuation surrounding words into separate pieces.
      * @param {string} [params.punctuationClass] - Class for punctuation pieces when separatePunctuation is on. Defaults to className.
+     * @param {boolean} [params.accessible=true] - Keep the text readable by screen readers: adds a visually hidden copy of each wrapped text node and hides the pieces with aria-hidden.
      * @throws {TypeError} If element is not an Element, or a removed option is used.
      * @throws {RangeError} If tagName or split is not permitted.
      * @method
@@ -81,7 +99,10 @@ class WrapChars
 
         // Validate everything before touching the DOM, so a bad option can't
         // leave the element half-wrapped.
+        const accessible = Boolean(params.accessible ?? true);
+
         const template = WrapChars.#createTemplate(params.tagName, params.className);
+        if (accessible) template.setAttribute("aria-hidden", "true");
 
         let punctuationTemplate = template;
         if (params.punctuationClass)
@@ -95,6 +116,7 @@ class WrapChars
             template,
             punctuationTemplate,
             separatePunctuation: Boolean(params.separatePunctuation),
+            accessible,
             spaceChar: WrapChars.#sanitiseSpaceChar(params.spaceChar),
             deep: Boolean(params.deep ?? true),
             skipClass: params.skipClass,
@@ -226,6 +248,9 @@ class WrapChars
     {
         const frag = document.createDocumentFragment();
 
+        // Screen readers read this copy; the pieces themselves are aria-hidden.
+        if (config.accessible) frag.appendChild(WrapChars.#createHiddenCopy(text));
+
         for (const [part, isPunctuation] of WrapChars.#pieces(text, config))
         {
             const isSpace = part === " ";
@@ -233,7 +258,18 @@ class WrapChars
 
             if (isSpace && !config.wrapSpaces)
             {
-                frag.appendChild(document.createTextNode(content));
+                if (config.accessible && config.spaceChar)
+                {
+                    // A replacement space is decorative, so hide it too.
+                    const hidden = document.createElement("span");
+                    hidden.setAttribute("aria-hidden", "true");
+                    hidden.textContent = content;
+                    frag.appendChild(hidden);
+                }
+                else
+                {
+                    frag.appendChild(document.createTextNode(content));
+                }
                 continue;
             }
 
@@ -245,6 +281,23 @@ class WrapChars
 
         return frag;
 
+    }
+
+
+
+    /**
+     * #createHiddenCopy()
+     * Build a visually hidden element containing text for screen readers.
+     *
+     * @param {string} text
+     * @returns {HTMLSpanElement}
+     */
+    static #createHiddenCopy(text)
+    {
+        const el = document.createElement("span");
+        Object.assign(el.style, VISUALLY_HIDDEN);
+        el.textContent = text;
+        return el;
     }
 
 
