@@ -17,7 +17,9 @@
   "unpkg": "./dist/wrap-chars.min.js",
   "jsdelivr": "./dist/wrap-chars.min.js",
   "files": [
-    "dist"
+    "dist",
+    "COPYING",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "keywords": [

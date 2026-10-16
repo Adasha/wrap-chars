@@ -200,6 +200,22 @@ describe("whitespace", () =>
         expect(wrapHTML("<b>&nbsp;</b>")).toBe("<b><span>&nbsp;</span></b>");
     });
 
+    // Regression: v2 could create empty wrappers with wrapSpaces in word mode.
+    it.each([" a ", "a  <b> b </b>  c", "<span> a </span> <span>b</span>", "a<br> b", "\n  a\n  <i>b</i>\n"])(
+        "never creates empty pieces from %j",
+        (html) =>
+        {
+            for (const params of [{ split: "word", wrapSpaces: true }, { wrapSpaces: true, spaceChar: "_" }])
+            {
+                const el = document.createElement("div");
+                el.innerHTML = html;
+                WrapChars.wrap(el, params);
+                const empty = [...el.querySelectorAll("[data-wrapchars]")].filter(e => !e.textContent);
+                expect(empty).toEqual([]);
+            }
+        },
+    );
+
     it("wraps spaces with wrapSpaces: true", () =>
     {
         expect(wrapHTML("a b", { wrapSpaces: true })).toBe("<span>a</span><span> </span><span>b</span>");
