@@ -20,11 +20,11 @@ v3.0.0
 
 Tiny script containing just two static methods: `wrap()` takes any element and wraps each inline character (or word) in a given tag, with an optional class, and `unwrap()` puts it all back again. Very small (around 4KB minified, under 2KB gzipped, no dependencies).
 
-Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. Version 2 was much more polite, and would do its best to preserve existing markup. Version 3 keeps that politeness, and adds proper handling of emoji and accented characters, the option to split punctuation from words, screen reader support out of the box, and the ability to undo it all.
+Version 1 of this was very blunt in its approach, stripping out any nested tags entirely. Version 2 was much more polite, and would do its best to preserve existing markup. Version 3 keeps that politeness, and adds proper handling of emoji and accented characters, the option to split punctuation from words, screen reader support out of the box, and the ability to undo it all (thanks, Claude).
 
-From v3 the source is an ES module, with a classic script build still available for good old-fashioned `<script>` tags. Upgrading from v2? There are a few breaking changes, see the [changelog](CHANGELOG.md#upgrading-from-2x).
+From v3 the source is an ES module, with a classic script build still available for old-school `<script>` tags. v3 has some breaking changes from v2 - see the [changelog](CHANGELOG.md#upgrading-from-2x).
 
-[Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html)
+[Homepage/Demos](http://lab.adasha.com/components/wrap-chars/index.html) (Horrificly outdated, will get to it eventually)
 
 ## Setup
 
@@ -102,7 +102,7 @@ const lines = document.querySelectorAll('.line');
 lines.forEach(line => WrapChars.wrap(line));
 ```
 
-Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space, matching how browsers render them. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely.
+Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely.
 
 Letters are split the way a reader would see them, so emoji like 👍🏽 or 👨‍👩‍👧, flags, and letters with combining accents each stay together as one piece.
 
@@ -196,7 +196,7 @@ Splitting text into lots of little elements can confuse screen readers, some of 
 
 The hidden copy is styled via inline CSS properties, so there's no stylesheet to include, and it works under a strict Content Security Policy. It's also excluded from text selection, so copying the text won't give you everything twice.
 
-A couple of things to bear in mind:
+Points of note:
 
 - Avoid focusable elements such as `button` for `tagName` with this on, as hidden elements shouldn't be focusable.
 - If you style or animate pieces with selectors like `#poem span`, the hidden copy will match too. Use `[data-wrapchars="piece"]` or a `className` instead.
@@ -244,4 +244,4 @@ Released under the [GNU Lesser General Public License v3.0](LICENSE). As the LGP
 
 ## AI usage disclosure
 
-This project is proudly hand-scripted. AI has been used to aid in bug fixing and exploit hunting, but all AI contributions are manually validated.
+This project has used AI since v2.4 to assist with hardening, accessibility and other code improvements. All AI contributions are reviewed by a human.
