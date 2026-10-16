@@ -173,6 +173,7 @@
                 <td>&nbsp;</td>
                 <td>
                     <button type="button" id="btn_apply">Apply</button>
+                    <button type="button" id="btn_unwrap">Unwrap</button>
                     <output id="out_error" role="alert"></output>
                 </td>
             </tr>
@@ -205,10 +206,12 @@
             txtPunct: document.getElementById('txt_punct'),
             cbA11y:   document.getElementById('cb_a11y'),
             btnApply: document.getElementById('btn_apply'),
+            btnUnwrap: document.getElementById('btn_unwrap'),
             outError: document.getElementById('out_error')
         };
 
         controls.btnApply.addEventListener('click', clickApply);
+        controls.btnUnwrap.addEventListener('click', () => WrapChars.unwrap(target));
 
 
         function clickApply(e)

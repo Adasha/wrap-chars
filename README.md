@@ -86,7 +86,15 @@ let lines = document.querySelectorAll ('*.lines');
 lines.forEach (line => WrapChars.wrap (line));
 ```
 
-Note that this is a destructive process. If you think you may want to revert to the original HTML structure at any point you will need to store a copy of the original markup before applying the method.
+Every element `WrapChars` creates carries a `data-wrapchars` attribute: `"piece"` for wrapped letters, words and punctuation, `"space"` for wrapped or replaced spaces, and `"text"` for the hidden screen-reader copy (see `accessible` below). Calling `wrap()` again on the same element skips anything already marked, so it's safe to repeat, and it wraps only text that was added since.
+
+To reverse the process, call `unwrap()` on the same element (or an ancestor):
+
+```javascript
+WrapChars.unwrap(domElement);
+```
+
+This replaces every marked element with plain text and merges the text back together, leaving your other markup in place. Whitespace stays collapsed as `wrap()` left it (see below), and any `spaceChar` reverts to a normal space. If you need the exact original markup back, store a copy before wrapping.
 
 Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space, matching how browsers render them. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely.
 
@@ -111,7 +119,7 @@ The `params` object can contain the following properties, all optional:
 | `deep` | Boolean | Boolean value where, if true, will parse the entire DOM tree of the element. If false will only wrap inline text of the element itself. Default is `true`. |
 | `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. If a value is set for `spaceChar` those characters are also subject to this setting. Default is `false` |
 | `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
-| `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. Any markup is kept as literal text, never parsed as HTML. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
+| `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. Any markup is kept as literal text, never parsed as HTML. When `wrapSpaces` is `false`, each replacement is placed in a plain `<span data-wrapchars="space">` (without `className`) so `unwrap()` can restore it. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
 | `separatePunctuation` | Boolean | Only applies when `split` is `"word"`. If true, punctuation before or after a word (e.g. `(`, `,`, `...`, `?!`) is wrapped as a separate piece. Punctuation inside a word, as in *don't*, *3.14* or *well-known*, stays put. In browsers without `Intl.Segmenter` (Firefox before 125), only punctuation at the start or end of each space-separated word is split off. Default is `false`. |
 | `punctuationClass` | string | Class name for punctuation pieces when `separatePunctuation` is on, so they can be styled separately. If not set, punctuation gets the same `className` as words. Default is *undefined*. |
 | `accessible` | Boolean | Keeps the text readable by screen readers, which otherwise may spell it out piece by piece. Each wrapped text node gets a visually hidden `<span>` containing the original text, and every piece (and any unwrapped `spaceChar`) gets `aria-hidden="true"`. The hidden copy is styled via inline CSS properties, so no stylesheet is needed, and is excluded from text selection so copied text isn't duplicated. Avoid focusable `tagName`s such as `button` with this on. Default is `true`. |

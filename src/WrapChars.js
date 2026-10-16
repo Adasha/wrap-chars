@@ -15,6 +15,10 @@ const SKIP_DESCEND_TAGS = new Set(["script", "style", "textarea", "noscript", "t
 
 const VALID_SPLIT_MODES = new Set(["letter", "word"]);
 
+// Marks every element WrapChars creates, so repeat calls can skip them and
+// unwrap() can find them. Values: "piece", "space" or "text" (screen-reader copy).
+const MARKER = "data-wrapchars";
+
 // HTML's definition of whitespace (space, tab, LF, FF, CR), as collapsed by
 // browsers. Deliberately excludes &nbsp;, &ensp; etc., which are content.
 const WHITESPACE_RUN  = /[ \t\n\f\r]+/g;
@@ -102,6 +106,7 @@ class WrapChars
         const accessible = Boolean(params.accessible ?? true);
 
         const template = WrapChars.#createTemplate(params.tagName, params.className);
+        template.setAttribute(MARKER, "piece");
         if (accessible) template.setAttribute("aria-hidden", "true");
 
         let punctuationTemplate = template;
@@ -125,6 +130,40 @@ class WrapChars
 
 
         WrapChars.#parseNode(element, config);
+    }
+
+
+
+    /**
+     * unwrap()
+     * Reverse wrap(): replace every element it created with plain text.
+     * Whitespace stays collapsed as wrap() left it, and spaceChar reverts
+     * to a normal space.
+     *
+     * @param {Element} element - The element previously passed to wrap(), or an ancestor.
+     * @throws {TypeError} If element is not an Element.
+     * @method
+     * @static
+     */
+    static unwrap(element)
+    {
+        if (!(element instanceof Element))
+        {
+            throw new TypeError("WrapChars.unwrap: element must be a DOM Element");
+        }
+
+        for (const el of element.querySelectorAll(`[${MARKER}]`))
+        {
+            switch (el.getAttribute(MARKER))
+            {
+                case "text":  el.remove(); break;
+                case "space": el.replaceWith(" "); break;
+                case "piece": el.replaceWith(el.textContent); break;
+            }
+        }
+
+        // Merge the restored fragments back into single text nodes.
+        element.normalize();
     }
 
 
@@ -195,6 +234,9 @@ class WrapChars
         {
             case Node.ELEMENT_NODE : //element
             {
+                // Already wrapped: leave it, so repeat calls are safe.
+                if (node.hasAttribute(MARKER)) break;
+
                 const tag = node.tagName.toLowerCase();
 
                 // Don't parse script/style/textarea/etc
@@ -258,13 +300,15 @@ class WrapChars
 
             if (isSpace && !config.wrapSpaces)
             {
-                if (config.accessible && config.spaceChar)
+                if (config.spaceChar)
                 {
-                    // A replacement space is decorative, so hide it too.
-                    const hidden = document.createElement("span");
-                    hidden.setAttribute("aria-hidden", "true");
-                    hidden.textContent = content;
-                    frag.appendChild(hidden);
+                    // Marked so unwrap() can restore the space; a replacement
+                    // is decorative, so it's hidden from screen readers too.
+                    const span = document.createElement("span");
+                    span.setAttribute(MARKER, "space");
+                    if (config.accessible) span.setAttribute("aria-hidden", "true");
+                    span.textContent = content;
+                    frag.appendChild(span);
                 }
                 else
                 {
@@ -275,6 +319,7 @@ class WrapChars
 
             const template = isPunctuation ? config.punctuationTemplate : config.template;
             const el = template.cloneNode(false);
+            if (isSpace) el.setAttribute(MARKER, "space");
             el.textContent = content;
             frag.appendChild(el);
         }
@@ -295,6 +340,7 @@ class WrapChars
     static #createHiddenCopy(text)
     {
         const el = document.createElement("span");
+        el.setAttribute(MARKER, "text");
         Object.assign(el.style, VISUALLY_HIDDEN);
         el.textContent = text;
         return el;

@@ -3,7 +3,8 @@ import WrapChars, { WrapChars as NamedWrapChars } from "../src/WrapChars.js";
 
 
 // Most tests are about how text is split, so the helpers turn off the
-// accessibility markup (tested separately) unless a test asks for it.
+// accessibility markup and wrapHTML drops data-wrapchars markers (both
+// tested separately) to keep expectations readable.
 
 /** Build a <div> from `html`, wrap it, and return the resulting markup. */
 function wrapHTML(html, params)
@@ -11,6 +12,7 @@ function wrapHTML(html, params)
     const el = document.createElement("div");
     el.innerHTML = html;
     WrapChars.wrap(el, { accessible: false, ...params });
+    for (const marked of el.querySelectorAll("[data-wrapchars]")) marked.removeAttribute("data-wrapchars");
     return el.innerHTML;
 }
 
@@ -209,9 +211,10 @@ describe("whitespace", () =>
 
 describe("spaceChar", () =>
 {
-    it("replaces spaces with spaceChar", () =>
+    it("replaces spaces with spaceChar, in an unclassed span", () =>
     {
-        expect(wrapHTML("a b", { spaceChar: "_" })).toBe("<span>a</span>_<span>b</span>");
+        expect(wrapHTML("a b", { spaceChar: "_", className: "c" }))
+            .toBe('<span class="c">a</span><span>_</span><span class="c">b</span>');
     });
 
     it("decodes HTML entities in spaceChar", () =>
@@ -231,7 +234,7 @@ describe("spaceChar", () =>
     it("does not replace non-breaking spaces", () =>
     {
         expect(wrapHTML("a&nbsp;b c", { spaceChar: "_" }))
-            .toBe("<span>a</span><span>&nbsp;</span><span>b</span>_<span>c</span>");
+            .toBe("<span>a</span><span>&nbsp;</span><span>b</span><span>_</span><span>c</span>");
     });
 });
 
@@ -335,17 +338,139 @@ describe("separatePunctuation", () =>
 });
 
 
+describe("markers", () =>
+{
+    const markers = (text, params) =>
+    {
+        const el = document.createElement("div");
+        el.textContent = text;
+        WrapChars.wrap(el, params);
+        return [...el.children].map(c => c.getAttribute("data-wrapchars"));
+    };
+
+    it("marks pieces, the screen-reader copy and wrapped spaces", () =>
+    {
+        expect(markers("a b", { wrapSpaces: true })).toEqual(["text", "piece", "space", "piece"]);
+    });
+
+    it("marks punctuation pieces as pieces", () =>
+    {
+        expect(markers("a,", { split: "word", separatePunctuation: true, punctuationClass: "p", accessible: false }))
+            .toEqual(["piece", "piece"]);
+    });
+
+    it("marks an unwrapped spaceChar as a space", () =>
+    {
+        expect(markers("a b", { spaceChar: "_", accessible: false })).toEqual(["piece", "space", "piece"]);
+    });
+});
+
+
 describe("repeat calls", () =>
 {
-    // Current behaviour, slated for review.
-    it("[current] nests wrappers when called twice", () =>
+    it.each([
+        { accessible: false },
+        { accessible: true },
+        { split: "word", wrapSpaces: true, spaceChar: "_" },
+        { split: "word", separatePunctuation: true },
+    ])("leave existing output unchanged with %j", (params) =>
+    {
+        const el = document.createElement("div");
+        el.innerHTML = "Hi, <em>you</em> there";
+        WrapChars.wrap(el, params);
+        const once = el.innerHTML;
+        WrapChars.wrap(el, params);
+        expect(el.innerHTML).toBe(once);
+    });
+
+    it("wrap text added since the last call", () =>
     {
         const el = document.createElement("div");
         el.textContent = "a";
         WrapChars.wrap(el, { accessible: false });
+        el.append("b");
         WrapChars.wrap(el, { accessible: false });
-        expect(el.innerHTML).toBe("<span><span>a</span></span>");
+        expect([...el.children].map(c => c.textContent)).toEqual(["a", "b"]);
     });
+});
+
+
+describe("unwrap", () =>
+{
+    /** Wrap then unwrap `html`, returning the container. */
+    function roundTrip(html, params)
+    {
+        const el = document.createElement("div");
+        el.innerHTML = html;
+        WrapChars.wrap(el, params);
+        WrapChars.unwrap(el);
+        return el;
+    }
+
+    it.each([
+        {},
+        { accessible: false },
+        { split: "word" },
+        { split: "word", separatePunctuation: true, punctuationClass: "p" },
+        { wrapSpaces: true },
+        { spaceChar: "&nbsp;" },
+        { spaceChar: "•", wrapSpaces: true, split: "word" },
+        { tagName: "b", className: "c" },
+    ])("restores the original markup after wrapping with %j", (params) =>
+    {
+        const html = 'Hello, <a href="#">dear <em>world</em></a>! 👍🏽 non&nbsp;breaking<!--c-->';
+        expect(roundTrip(html, params).innerHTML).toBe(html);
+    });
+
+    it("leaves a single text node per original text node", () =>
+    {
+        const el = roundTrip("a b <b>c</b>");
+        expect([...el.childNodes].map(n => n.nodeType)).toEqual([Node.TEXT_NODE, Node.ELEMENT_NODE]);
+        expect(el.querySelector("b").childNodes).toHaveLength(1);
+    });
+
+    it("keeps whitespace collapsed as wrap() left it", () =>
+    {
+        expect(roundTrip("a \n\t b").innerHTML).toBe("a b");
+    });
+
+    it("leaves elements it didn't create alone", () =>
+    {
+        const el = document.createElement("div");
+        el.textContent = "a";
+        WrapChars.wrap(el);
+        el.append(document.createElement("span"));
+        WrapChars.unwrap(el);
+        expect(el.innerHTML).toBe("a<span></span>");
+    });
+
+    it("keeps markup-like text as text", () =>
+    {
+        const el = roundTrip("&lt;img src=x&gt;", { split: "word" });
+        expect(el.querySelector("img")).toBeNull();
+        expect(el.textContent).toBe("<img src=x>");
+    });
+
+    it("allows wrapping again afterwards", () =>
+    {
+        const el = roundTrip("ab");
+        WrapChars.wrap(el, { accessible: false });
+        expect(el.children).toHaveLength(2);
+    });
+
+    it("does nothing on unwrapped content", () =>
+    {
+        expect(roundTrip("<p>a</p>", { skipClass: "x" }).innerHTML).toBe("<p>a</p>");
+        const el = document.createElement("div");
+        el.innerHTML = "<p>a</p>";
+        WrapChars.unwrap(el);
+        expect(el.innerHTML).toBe("<p>a</p>");
+    });
+
+    it.each([null, undefined, "div", document.createTextNode("x")])(
+        "throws TypeError for non-Element %s",
+        (value) => expect(() => WrapChars.unwrap(value)).toThrow(TypeError),
+    );
 });
 
 
@@ -529,9 +654,11 @@ describe("accessible", () =>
         expect(el.firstChild.textContent).toBe("<img src=x>");
     });
 
-    it("adds nothing with accessible: false", () =>
+    it("adds no accessibility markup with accessible: false", () =>
     {
         const el = wrapAccessible("a b", { accessible: false, spaceChar: "•" });
-        expect(el.innerHTML).toBe("<span>a</span>•<span>b</span>");
+        expect(el.innerHTML).toBe(
+            '<span data-wrapchars="piece">a</span><span data-wrapchars="space">•</span><span data-wrapchars="piece">b</span>',
+        );
     });
 });

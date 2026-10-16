@@ -25,7 +25,7 @@ describe("dist", () =>
         const el = document.createElement("div");
         el.textContent = "ab";
         mod.default.wrap(el, { accessible: false });
-        expect(el.innerHTML).toBe("<span>a</span><span>b</span>");
+        expect(el.innerHTML).toBe('<span data-wrapchars="piece">a</span><span data-wrapchars="piece">b</span>');
     });
 
     it("wrap-chars.min.js defines a global WrapChars when run as a classic script", () =>
@@ -40,7 +40,7 @@ describe("dist", () =>
         const el = document.createElement("div");
         el.textContent = "ab";
         globalThis.WrapChars.wrap(el, { accessible: false });
-        expect(el.innerHTML).toBe("<span>a</span><span>b</span>");
+        expect(el.innerHTML).toBe('<span data-wrapchars="piece">a</span><span data-wrapchars="piece">b</span>');
 
         delete globalThis.WrapChars;
     });
