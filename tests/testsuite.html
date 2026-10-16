@@ -67,6 +67,14 @@
             <br>
             
             <span class="line">This text includes&nbsp;non-breaking&nbsp;spaces and&ensp;en-width&ensp;spaces.</span>
+
+            <br>
+
+            <span class="line">“Punctuation,” she said—don’t you think?! (Well-known: 3.14…)</span>
+
+            <br>
+
+            <span class="line">Emoji 👍🏽 👨‍👩‍👧 🇬🇧 and accents: café, naïve, e&#x301;.</span>
             
             <br>
 
@@ -142,7 +150,23 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
+                    <input id="cb_punct" name="cb_punct" type="checkbox">
+                    <label for="cb_punct">Separate punctuation (word mode)</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="txt_punct">Punctuation class</label>
+                </td>
+                <td>
+                    <input id="txt_punct" name="txt_punct" type="text" value="test_punct">
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
                     <button type="button" id="btn_apply">Apply</button>
+                    <output id="out_error" role="alert"></output>
                 </td>
             </tr>
 
@@ -170,7 +194,10 @@
             txtSpace: document.getElementById('txt_space'),
             cbDeep:   document.getElementById('cb_deep'),
             cbSpaces: document.getElementById('cb_spaces'),
-            btnApply: document.getElementById('btn_apply')
+            cbPunct:  document.getElementById('cb_punct'),
+            txtPunct: document.getElementById('txt_punct'),
+            btnApply: document.getElementById('btn_apply'),
+            outError: document.getElementById('out_error')
         };
 
         controls.btnApply.addEventListener('click', clickApply);
@@ -187,10 +214,20 @@
                 skipClass:   controls.txtSkip.value,
                 spaceChar:   controls.txtSpace.value,
                 deep:        controls.cbDeep.checked,
-                wrapSpaces:  controls.cbSpaces.checked
+                wrapSpaces:  controls.cbSpaces.checked,
+                separatePunctuation: controls.cbPunct.checked,
+                punctuationClass:    controls.txtPunct.value
             };
 
-            WrapChars.wrap(target, params);
+            controls.outError.value = '';
+            try
+            {
+                WrapChars.wrap(target, params);
+            }
+            catch (err)
+            {
+                controls.outError.value = err.message;
+            }
         }
 
 

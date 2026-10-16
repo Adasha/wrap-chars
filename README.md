@@ -112,6 +112,8 @@ The `params` object can contain the following properties, all optional:
 | `wrapSpaces` | Boolean | Boolean value to specify if spaces should be wrapped. If a value is set for `spaceChar` those characters are also subject to this setting. Default is `false` |
 | `skipClass` | string | If specified, any element with a matching class name will be ignored. Default is *undefined*. |
 | `spaceChar` | string | The character to replace spaces with, if specified. The value is standardised internally, so can be a raw character, an escaped hexcode, a Unicode code or an HTML entity. Any markup is kept as literal text, never parsed as HTML. `WrapChars.wrap()` intentionally does not convert existing HTML entities, so certain results can be achieved by adding them beforehand. Default is *undefined*. |
+| `separatePunctuation` | Boolean | Only applies when `split` is `"word"`. If true, punctuation before or after a word (e.g. `(`, `,`, `...`, `?!`) is wrapped as a separate piece. Punctuation inside a word, as in *don't*, *3.14* or *well-known*, stays put. In browsers without `Intl.Segmenter` (Firefox before 125), only punctuation at the start or end of each space-separated word is split off. Default is `false`. |
+| `punctuationClass` | string | Class name for punctuation pieces when `separatePunctuation` is on, so they can be styled separately. If not set, punctuation gets the same `className` as words. Default is *undefined*. |
 
 ##### Example
 
@@ -129,7 +131,6 @@ WrapChars.wrap(myElement, {
 
 ## Known issues
 
-- `word` type can't differentiate between words and punctuation. To work around this, pre-wrap characters and make use of `skipClass`.
 - Certain (unlikely) combinations of HTML mark-up can cause empty elements to be added when `wrapSpaces` is `true` and `split` is equal to `word`. Can be fixed with minor HTML reformatting.
 
 ## Version history

@@ -36,3 +36,20 @@ blockquote
 {
     text-align: right;
 }
+
+*.test_punct
+{
+    color: #b00;
+}
+
+*.test_punct:hover
+{
+    border: 2px solid red;
+    margin: -2px;
+}
+
+#out_error
+{
+    display: block;
+    color: #b00;
+}

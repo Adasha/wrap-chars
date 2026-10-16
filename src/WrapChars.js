@@ -21,9 +21,21 @@ const WHITESPACE_RUN  = /[ \t\n\f\r]+/g;
 const WHITESPACE_ONLY = /^[ \t\n\f\r]*$/;
 const WORD_SPLIT      = /( )/;
 
+// Unicode punctuation, for separatePunctuation. EDGE_PUNCTUATION is the
+// fallback where Intl.Segmenter is unavailable: it only splits off leading
+// and trailing punctuation, leaving word-internal marks (don't, 3.14) alone.
+const PUNCTUATION      = /^\p{P}+$/u;
+const EDGE_PUNCTUATION = /^(\p{P}*)(.*?)(\p{P}*)$/su;
+
+// Hyphens between two words are kept as part of the word (well-known).
+const HYPHEN = /^[-\u2010\u2011]$/;
+
 
 class WrapChars
 {
+
+    // Intl.Segmenter instances, created on first use and reused.
+    static #segmenters = {};
 
     /**
      * wrap()
@@ -38,6 +50,8 @@ class WrapChars
      * @param {boolean} [params.wrapSpaces=false] - If true, will wrap space characters, including spaceChar if specified.
      * @param {string} [params.skipClass] - If provided, will pass over any elements with that class.
      * @param {string} [params.spaceChar] - An optional string to replace inline spaces with. HTML entities are decoded; any markup is kept as literal text.
+     * @param {boolean} [params.separatePunctuation=false] - Word mode only: split punctuation surrounding words into separate pieces.
+     * @param {string} [params.punctuationClass] - Class for punctuation pieces when separatePunctuation is on. Defaults to className.
      * @throws {TypeError} If element is not an Element, or a removed option is used.
      * @throws {RangeError} If tagName or split is not permitted.
      * @method
@@ -67,9 +81,20 @@ class WrapChars
 
         // Validate everything before touching the DOM, so a bad option can't
         // leave the element half-wrapped.
+        const template = WrapChars.#createTemplate(params.tagName, params.className);
+
+        let punctuationTemplate = template;
+        if (params.punctuationClass)
+        {
+            punctuationTemplate = template.cloneNode(false);
+            punctuationTemplate.className = String(params.punctuationClass);
+        }
+
         const config = {
             split,
-            template: WrapChars.#createTemplate(params.tagName, params.className),
+            template,
+            punctuationTemplate,
+            separatePunctuation: Boolean(params.separatePunctuation),
             spaceChar: WrapChars.#sanitiseSpaceChar(params.spaceChar),
             deep: Boolean(params.deep ?? true),
             skipClass: params.skipClass,
@@ -200,14 +225,9 @@ class WrapChars
     static #wrap(text, config)
     {
         const frag = document.createDocumentFragment();
-        const parts = config.split === "word"
-            ? text.split(WORD_SPLIT)
-            : [...text];
 
-        for (const part of parts)
+        for (const [part, isPunctuation] of WrapChars.#pieces(text, config))
         {
-            if (!part.length) continue;
-
             const isSpace = part === " ";
             const content = isSpace && config.spaceChar ? config.spaceChar : part;
 
@@ -217,13 +237,121 @@ class WrapChars
                 continue;
             }
 
-            const el = config.template.cloneNode(false);
+            const template = isPunctuation ? config.punctuationTemplate : config.template;
+            const el = template.cloneNode(false);
             el.textContent = content;
             frag.appendChild(el);
         }
 
         return frag;
 
+    }
+
+
+
+    /**
+     * #pieces()
+     * Divide text into the pieces to be wrapped, according to config.
+     *
+     * @param {string} text - Text with whitespace collapsed to single spaces.
+     * @param {Object} config
+     * @yields {[string, boolean]} Each non-empty piece, and whether it is separated punctuation.
+     */
+    static *#pieces(text, config)
+    {
+        if (config.split === "letter")
+        {
+            const segmenter = WrapChars.#getSegmenter("grapheme");
+            if (segmenter)
+            {
+                for (const { segment } of segmenter.segment(text)) yield [segment, false];
+            }
+            else
+            {
+                // Code points: keeps surrogate pairs, but not clusters like 👍🏽, together.
+                for (const char of text) yield [char, false];
+            }
+            return;
+        }
+
+        for (const chunk of text.split(WORD_SPLIT))
+        {
+            if (!chunk.length) continue;
+
+            if (chunk === " " || !config.separatePunctuation)
+            {
+                yield [chunk, false];
+            }
+            else
+            {
+                yield* WrapChars.#splitPunctuation(chunk);
+            }
+        }
+    }
+
+
+
+    /**
+     * #splitPunctuation()
+     * Separate punctuation runs from a space-delimited word. Anything that
+     * isn't punctuation (letters, symbols, emoji, &nbsp;) stays together.
+     *
+     * @param {string} word
+     * @yields {[string, boolean]} Each non-empty piece, and whether it is punctuation.
+     */
+    static *#splitPunctuation(word)
+    {
+        const segmenter = WrapChars.#getSegmenter("word");
+
+        if (!segmenter)
+        {
+            const [, lead, core, trail] = word.match(EDGE_PUNCTUATION);
+            if (lead)  yield [lead, true];
+            if (core)  yield [core, false];
+            if (trail) yield [trail, true];
+            return;
+        }
+
+        const segments = [...segmenter.segment(word)];
+        let text = "", punctuation = "";
+
+        for (const [i, { segment, isWordLike }] of segments.entries())
+        {
+            const isCompoundHyphen = HYPHEN.test(segment)
+                && segments[i - 1]?.isWordLike && segments[i + 1]?.isWordLike;
+
+            if (!isWordLike && !isCompoundHyphen && PUNCTUATION.test(segment))
+            {
+                if (text) yield [text, false];
+                text = "";
+                punctuation += segment;
+            }
+            else
+            {
+                if (punctuation) yield [punctuation, true];
+                punctuation = "";
+                text += segment;
+            }
+        }
+
+        if (text)        yield [text, false];
+        if (punctuation) yield [punctuation, true];
+    }
+
+
+
+    /**
+     * #getSegmenter()
+     * Get a shared Intl.Segmenter, or null where unsupported (Firefox < 125).
+     *
+     * @param {"grapheme"|"word"} granularity
+     * @returns {Intl.Segmenter|null}
+     */
+    static #getSegmenter(granularity)
+    {
+        if (typeof Intl === "undefined" || typeof Intl.Segmenter !== "function") return null;
+
+        return WrapChars.#segmenters[granularity] ??= new Intl.Segmenter(undefined, { granularity });
     }
 
 

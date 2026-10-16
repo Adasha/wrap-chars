@@ -12,6 +12,28 @@ function wrapHTML(html, params)
 }
 
 
+/** Run `fn` as if Intl.Segmenter were unsupported (e.g. Firefox < 125). */
+function withoutSegmenter(fn)
+{
+    const original = Intl.Segmenter;
+    Intl.Segmenter = undefined;
+    try { return fn(); }
+    finally { Intl.Segmenter = original; }
+}
+
+
+/** Summarise wrapped output as "[class:text]" pieces and quoted text nodes. */
+function pieces(text, params)
+{
+    const el = document.createElement("div");
+    el.textContent = text;
+    WrapChars.wrap(el, params);
+    return [...el.childNodes]
+        .map(n => n.nodeType === Node.TEXT_NODE ? JSON.stringify(n.data) : `[${n.className}:${n.textContent}]`)
+        .join("");
+}
+
+
 afterEach(() => vi.restoreAllMocks());
 
 
@@ -213,17 +235,99 @@ describe("spaceChar", () =>
 
 describe("unicode", () =>
 {
-    // Current behaviour, slated for review: splitting is by code point,
-    // which breaks grapheme clusters apart.
-    it("[current] splits emoji modifiers and combining marks", () =>
+    it.each([
+        ["emoji with skin-tone modifier", "👍🏽"],
+        ["combining accent", "e\u0301"],
+        ["ZWJ family emoji", "👨‍👩‍👧"],
+        ["flag", "🇬🇧"],
+        ["surrogate pair", "𝒜"],
+    ])("keeps a %s together as one letter", (_, char) =>
     {
-        expect(wrapHTML("👍🏽")).toBe("<span>👍</span><span>🏽</span>");
-        expect(wrapHTML("é")).toBe("<span>e</span><span>́</span>");
+        expect(wrapHTML(char)).toBe(`<span>${char}</span>`);
     });
 
-    it("does not split surrogate pairs", () =>
+    it("falls back to code points without Intl.Segmenter", () =>
     {
-        expect(wrapHTML("𝒜")).toBe("<span>𝒜</span>");
+        withoutSegmenter(() =>
+        {
+            expect(wrapHTML("👍🏽")).toBe("<span>👍</span><span>🏽</span>");
+            expect(wrapHTML("𝒜")).toBe("<span>𝒜</span>");
+        });
+    });
+});
+
+
+describe("separatePunctuation", () =>
+{
+    const params = { split: "word", className: "w", separatePunctuation: true };
+
+    it("is off by default", () =>
+    {
+        expect(pieces("Hello, world!", { split: "word", className: "w" }))
+            .toBe('[w:Hello,]" "[w:world!]');
+    });
+
+    it("splits punctuation into pieces with the same class as words by default", () =>
+    {
+        expect(pieces("Hello, world!", params)).toBe('[w:Hello][w:,]" "[w:world][w:!]');
+    });
+
+    it("uses punctuationClass for punctuation pieces", () =>
+    {
+        expect(pieces("Hello, world!", { ...params, punctuationClass: "p" }))
+            .toBe('[w:Hello][p:,]" "[w:world][p:!]');
+    });
+
+    it("splits leading punctuation and groups runs of punctuation", () =>
+    {
+        const p = { ...params, punctuationClass: "p" };
+        expect(pieces("(hi) wait... what?!", p))
+            .toBe('[p:(][w:hi][p:)]" "[w:wait][p:...]" "[w:what][p:?!]');
+        expect(pieces("¿Qué? «oui»", p)).toBe('[p:¿][w:Qué][p:?]" "[p:«][w:oui][p:»]');
+    });
+
+    it("keeps word-internal punctuation", () =>
+    {
+        expect(pieces("don't it’s 3.14 well-known", params))
+            .toBe('[w:don\'t]" "[w:it’s]" "[w:3.14]" "[w:well-known]');
+    });
+
+    it("splits dashes between words", () =>
+    {
+        expect(pieces("a—b", { ...params, punctuationClass: "p" })).toBe("[w:a][p:—][w:b]");
+    });
+
+    it("keeps symbols, emoji and non-breaking spaces with the word", () =>
+    {
+        expect(pieces("$5 hi👍 non\u00A0breaking", params))
+            .toBe('[w:$5]" "[w:hi👍]" "[w:non\u00A0breaking]');
+    });
+
+    it("splits punctuation in unspaced scripts", () =>
+    {
+        expect(pieces("你好，世界。", { ...params, punctuationClass: "p" }))
+            .toBe("[w:你好][p:，][w:世界][p:。]");
+    });
+
+    it("works with wrapSpaces and spaceChar", () =>
+    {
+        expect(pieces("a, b", { ...params, wrapSpaces: true, spaceChar: "_" }))
+            .toBe("[w:a][w:,][w:_][w:b]");
+    });
+
+    it("has no effect in letter mode", () =>
+    {
+        expect(pieces("a,", { className: "w", separatePunctuation: true, punctuationClass: "p" }))
+            .toBe("[w:a][w:,]");
+    });
+
+    it("splits only leading and trailing punctuation without Intl.Segmenter", () =>
+    {
+        withoutSegmenter(() =>
+        {
+            expect(pieces("(hi) don't a—b", { ...params, punctuationClass: "p" }))
+                .toBe('[p:(][w:hi][p:)]" "[w:don\'t]" "[w:a—b]');
+        });
     });
 });
 
