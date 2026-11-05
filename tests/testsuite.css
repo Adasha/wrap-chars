@@ -1,55 +1,478 @@
-blockquote
+:root
 {
-    font: 140% sans-serif;
-    color: #000;
-    background: #eee;
-    padding: 2em;
-    text-rendering: geometricPrecision;
-    width: -webkit-max-content;
-    width: -moz-max-content;
-    width: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-all;
+    color-scheme: light dark;
+
+    --bg: light-dark(#f4f5f7, #14161a);
+    --panel: light-dark(#ffffff, #1d2026);
+    --surface: light-dark(#eceef2, #262a32);
+    --border: light-dark(#d7dae1, #343944);
+    --text: light-dark(#1b1e24, #e6e8ec);
+    --muted: light-dark(#5d6472, #9aa1ae);
+    --accent: light-dark(#3b5bdb, #7c93ff);
+    --accent-text: light-dark(#fff, #10131c);
+    --danger: light-dark(#c92a2a, #ff8787);
+    --ok: light-dark(#2b8a3e, #69db7c);
+    --radius: 8px;
+    --sidebar-width: 20rem;
 }
 
-*.test_class:hover{
-    border: 2px solid blue;
-    margin: -2px;
+*, *::before, *::after
+{
+    box-sizing: border-box;
 }
 
+body
+{
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+
+/* Left column: controls */
 
 #controls
 {
-    position: fixed;
-    top: 10px; left: 10px;
-    width: max-content;
-    padding: 1em;
-    border: 1px solid #000;
-    background-color: #ccc;
-    box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.5rem 1.25rem;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
 }
 
-#controls td:first-child
+#controls header
 {
-    text-align: right;
+    margin-bottom: 1.25rem;
 }
 
-*.test_punct
+#controls h1
 {
-    color: #b00;
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
 }
 
-*.test_punct:hover
+#controls header p
 {
-    border: 2px solid red;
-    margin: -2px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+#options
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+fieldset
+{
+    margin: 0;
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 0;
+}
+
+legend
+{
+    padding: 0 0.4rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.field
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.field label
+{
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+input[type="text"], select
+{
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    font: inherit;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+input::placeholder
+{
+    color: var(--muted);
+    opacity: 0.8;
+}
+
+.check
+{
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+input[type="checkbox"]
+{
+    width: 1.05rem;
+    height: 1.05rem;
+    margin: 0;
+    accent-color: var(--accent);
+}
+
+:is(input, select, button):focus-visible
+{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.actions
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+button
+{
+    padding: 0.55rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: filter 0.15s;
+}
+
+button:hover
+{
+    filter: brightness(0.95);
+}
+
+button.primary
+{
+    color: var(--accent-text);
+    background: var(--accent);
+    border-color: var(--accent);
 }
 
 #out_error
 {
     display: block;
-    color: #b00;
+    color: var(--danger);
+    font-size: 0.875rem;
+}
+
+#out_error:empty
+{
+    display: none;
+}
+
+
+/* Right column: sample output */
+
+*.test_class:hover
+{
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+}
+
+*.test_punct
+{
+    color: var(--danger);
+}
+
+*.test_punct:hover
+{
+    outline: 2px solid var(--danger);
+    outline-offset: -1px;
+}
+
+
+/* Narrow screens: stack the columns */
+
+@media (max-width: 760px)
+{
+    body
+    {
+        grid-template-columns: 1fr;
+    }
+
+    #controls
+    {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+}
+
+
+/* Summary and navigation */
+
+#summary
+{
+    margin: 0 0 1rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--muted);
+}
+
+#summary[data-state="pass"]
+{
+    color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 14%, transparent);
+}
+
+#summary[data-state="fail"]
+{
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 14%, transparent);
+}
+
+#controls nav
+{
+    margin-bottom: 1.25rem;
+}
+
+#group_nav
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+#group_nav a
+{
+    display: block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8125rem;
+    color: var(--text);
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+#group_nav a:hover
+{
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+
+/* Groups and cases */
+
+html
+{
+    scroll-behavior: smooth;
+}
+
+#cases
+{
+    padding: 2rem;
+    min-width: 0;
+}
+
+.group
+{
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 1.5rem;
+}
+
+.group h2
+{
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+}
+
+.group-note
+{
+    margin: 0 0 0.75rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.grid
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    gap: 1rem;
+    align-items: start;
+    margin-top: 0.75rem;
+}
+
+.case
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    scroll-margin-top: 1.5rem;
+}
+
+.case:target
+{
+    border-color: var(--accent);
+}
+
+.case header
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.case h3
+{
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+.note, .forced
+{
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+}
+
+.forced
+{
+    font-family: ui-monospace, monospace;
+}
+
+.status
+{
+    flex: none;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface);
+    border-radius: 999px;
+}
+
+.status[data-state="pass"]
+{
+    color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 14%, transparent);
+}
+
+.status[data-state="fail"]
+{
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 14%, transparent);
+}
+
+.sample
+{
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    background: var(--bg);
+    border-radius: 8px;
+    text-rendering: geometricPrecision;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.sample .line
+{
+    margin: 0;
+}
+
+.sample .line + .line
+{
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border);
+}
+
+.checks
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+}
+
+.checks:empty
+{
+    display: none;
+}
+
+.checks li[data-ok="false"]
+{
+    color: var(--danger);
+}
+
+.checks li[data-ok="true"]
+{
+    display: none;
+}
+
+details
+{
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+summary
+{
+    cursor: pointer;
+}
+
+pre
+{
+    margin: 0.5rem 0 0;
+    max-height: 16rem;
+    overflow: auto;
+    padding: 0.75rem;
+    font: 0.75rem/1.5 ui-monospace, monospace;
+    color: var(--text);
+    background: var(--surface);
+    border-radius: 6px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.show-pieces [data-wrapchars]:not([data-wrapchars="text"])
+{
+    outline: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    outline-offset: -1px;
 }

@@ -10,248 +10,121 @@
 
 <body>
 
-    <main id="target">
+    <aside id="controls" aria-label="Options">
 
-        <blockquote cite="Lorem Ipsum" class="sample">
+        <header>
+            <h1>wrap-chars</h1>
+            <p>Test suite</p>
+        </header>
 
-            <span class="line">A line of raw text, with no children.</span>
-            
-            <br>
+        <p id="summary" role="status" data-state="idle">Running…</p>
 
-            <span class="line">
-                A line of raw text, with whitespace at the start and end.
-            </span>
-            
-            <br>
+        <nav aria-label="Test groups">
+            <ul id="group_nav"></ul>
+        </nav>
 
-            <span class="line">   A    line    of    raw  
-                text,    with    additional    whitespace  
-                    added    throughout.   </span>
-            
-            <br>
+        <form id="options" onsubmit="return false">
 
-            <span class="line"><strong>A line of text entirely within a nested strong element.</strong></span>
-            
-            <br>
-            
-            <span class="line"><em>This emphasised text</em>, at the start of the sentence.</span>
-            
-            <br>
+            <fieldset>
+                <legend>Preset</legend>
 
-            <span class="line">Line of text, with <em>this emphasised text</em> in the middle.</span>
-            
-            <br>
-            
-            <span class="line">A line of text, with <em>this emphasised text at the end.</em></span>
-            
-            <br>
+                <div class="field">
+                    <label for="sel_preset">Option set</label>
+                    <select id="sel_preset" name="sel_preset"></select>
+                </div>
 
-            <span class="line"><span>A line of text, with</span> <span>adjacent nested siblings.</span></span>
-            
-            <br>
+                <label class="check" for="cb_outline">
+                    <input id="cb_outline" name="cb_outline" type="checkbox">
+                    <span>Outline every piece</span>
+                </label>
+            </fieldset>
 
-            <span class="line">     <span> A line of text, with </span>   nested siblings   <span> and extra spaces.</span>     </span>
-            
-            <br>
-            
-            <span class="line">
-                <a href="#">  
-                    <span>Nested spans in an anchor with code indenting,</span> 
-                    <br>
-                    <span>containing adjacent nested siblings</span>  
-                    <br>
-                    <span>and line breaks.</span>
-                </a>  
-            </span>
-            
-            <br>
-            
-            <span class="line">This text includes&nbsp;non-breaking&nbsp;spaces and&ensp;en-width&ensp;spaces.</span>
+            <fieldset>
+                <legend>Splitting</legend>
 
-            <br>
-
-            <span class="line">“Punctuation,” she said—don’t you think?! (Well-known: 3.14…)</span>
-
-            <br>
-
-            <span class="line">Emoji 👍🏽 👨‍👩‍👧 🇬🇧 and accents: café, naïve, e&#x301;.</span>
-            
-            <br>
-
-
-
-        </blockquote>
-    
-    </main>
-
-
-
-    <aside id="controls">
-
-        <table>
-
-            <tr>
-                <td>
+                <div class="field">
                     <label for="sel_split">Split method</label>
-                </td>
-                <td>
                     <select id="sel_split" name="sel_split">
                         <option value="letter" selected>Letter</option>
                         <option value="word">Word</option>
                     </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="txt_tag">Tag name</label>
-                </td>
-                <td>
-                    <input id="txt_tag" name="txt_tag" type="text" value="span" placeholder="(do not include brackets)">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="txt_class">Class name</label>
-                </td>
-                <td>
-                    <input id="txt_class" name="txt_class" type="text" value="test_class">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="txt_skip">Class to skip</label>
-                </td>
-                <td>
-                    <input id="txt_skip" name="txt_skip" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input id="cb_deep" name="cb_deep" type="checkbox" checked>
-                    <label for="cb_deep">Parse full tree</label>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input id="cb_spaces" name="cb_spaces" type="checkbox">
-                    <label for="cb_spaces">Wrap spaces</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="txt_space">Replace spaces with</label>
-                </td>
-                <td>
-                    <input id="txt_space" name="txt_space" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input id="cb_punct" name="cb_punct" type="checkbox">
-                    <label for="cb_punct">Separate punctuation (word mode)</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="txt_punct">Punctuation class</label>
-                </td>
-                <td>
-                    <input id="txt_punct" name="txt_punct" type="text" value="test_punct">
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input id="cb_a11y" name="cb_a11y" type="checkbox" checked>
-                    <label for="cb_a11y">Accessible (screen-reader copy)</label>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <button type="button" id="btn_apply">Apply</button>
-                    <button type="button" id="btn_unwrap">Unwrap</button>
-                    <output id="out_error" role="alert"></output>
-                </td>
-            </tr>
+                </div>
 
-        </table>
+                <label class="check" for="cb_deep">
+                    <input id="cb_deep" name="cb_deep" type="checkbox" checked>
+                    <span>Parse full tree</span>
+                </label>
+
+                <div class="field">
+                    <label for="txt_skip">Class to skip</label>
+                    <input id="txt_skip" name="txt_skip" type="text">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Output</legend>
+
+                <div class="field">
+                    <label for="txt_tag">Tag name</label>
+                    <input id="txt_tag" name="txt_tag" type="text" value="span" placeholder="(do not include brackets)">
+                </div>
+
+                <div class="field">
+                    <label for="txt_class">Class name</label>
+                    <input id="txt_class" name="txt_class" type="text" value="test_class">
+                </div>
+
+                <label class="check" for="cb_a11y">
+                    <input id="cb_a11y" name="cb_a11y" type="checkbox" checked>
+                    <span>Accessible (screen-reader copy)</span>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Spaces</legend>
+
+                <label class="check" for="cb_spaces">
+                    <input id="cb_spaces" name="cb_spaces" type="checkbox">
+                    <span>Wrap spaces</span>
+                </label>
+
+                <div class="field">
+                    <label for="txt_space">Replace spaces with</label>
+                    <input id="txt_space" name="txt_space" type="text">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Punctuation</legend>
+
+                <label class="check" for="cb_punct">
+                    <input id="cb_punct" name="cb_punct" type="checkbox">
+                    <span>Separate punctuation (word mode)</span>
+                </label>
+
+                <div class="field">
+                    <label for="txt_punct">Punctuation class</label>
+                    <input id="txt_punct" name="txt_punct" type="text" value="test_punct">
+                </div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="button" id="btn_apply" class="primary">Apply</button>
+                <button type="button" id="btn_unwrap">Unwrap</button>
+            </div>
+            <output id="out_error" role="alert"></output>
+
+        </form>
 
     </aside>
 
 
 
-	<script type="module">
-        
-        import WrapChars from '../src/WrapChars.js';
-        
-
-        const target = document.getElementById('target');
-        const originalHTML = target.innerHTML;
-        const controlBlock = document.getElementById('controls');
+    <main id="cases"></main>
 
 
-        var controls = {
-            selSplit: document.getElementById('sel_split'),
-            txtTag:   document.getElementById('txt_tag'),
-            txtClass: document.getElementById('txt_class'),
-            txtSkip:  document.getElementById('txt_skip'),
-            txtSpace: document.getElementById('txt_space'),
-            cbDeep:   document.getElementById('cb_deep'),
-            cbSpaces: document.getElementById('cb_spaces'),
-            cbPunct:  document.getElementById('cb_punct'),
-            txtPunct: document.getElementById('txt_punct'),
-            cbA11y:   document.getElementById('cb_a11y'),
-            btnApply: document.getElementById('btn_apply'),
-            btnUnwrap: document.getElementById('btn_unwrap'),
-            outError: document.getElementById('out_error')
-        };
 
-        controls.btnApply.addEventListener('click', clickApply);
-        controls.btnUnwrap.addEventListener('click', () => WrapChars.unwrap(target));
-
-
-        function clickApply(e)
-        {
-            restoreOriginalMarkup();
-
-            let params = {
-                split:       controls.selSplit.value,
-                tagName:     controls.txtTag.value,
-                className:   controls.txtClass.value,
-                skipClass:   controls.txtSkip.value,
-                spaceChar:   controls.txtSpace.value,
-                deep:        controls.cbDeep.checked,
-                wrapSpaces:  controls.cbSpaces.checked,
-                separatePunctuation: controls.cbPunct.checked,
-                punctuationClass:    controls.txtPunct.value,
-                accessible:          controls.cbA11y.checked
-            };
-
-            controls.outError.value = '';
-            try
-            {
-                WrapChars.wrap(target, params);
-            }
-            catch (err)
-            {
-                controls.outError.value = err.message;
-            }
-        }
-
-
-        function restoreOriginalMarkup()
-        {
-            target.innerHTML = originalHTML;
-        }
-
-
-        controls.btnApply.dispatchEvent(new MouseEvent('click'));
-
-    </script>
+    <script type="module" src="testsuite.js"></script>
 
 
 </body>
