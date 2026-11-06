@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [3.2.0] - 2026-11-06
 
 ### Added
 
@@ -83,6 +83,7 @@ A big tidy-up: hardened, modernised, and made accessible. Versions 2.3 and 2.4 w
 
 - Original version.
 
+[3.2.0]: https://github.com/Adasha/wrap-chars/releases/tag/v3.2.0
 [3.1.0]: https://github.com/Adasha/wrap-chars/releases/tag/v3.1.0
 [3.0.0]: https://github.com/Adasha/wrap-chars/releases/tag/v3.0.0
 [2.4.0]: https://github.com/Adasha/wrap-chars
