@@ -102,7 +102,7 @@ const lines = document.querySelectorAll('.line');
 lines.forEach(line => WrapChars.wrap(line));
 ```
 
-Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely.
+Runs of whitespace (spaces, tabs, line breaks) are reduced to a single space. Non-breaking and other Unicode spaces such as `&nbsp;` and `&ensp;` are treated as ordinary characters, so `non&nbsp;breaking` stays one word with `split: "word"`. Text nodes containing only whitespace are ignored completely. Elements the browser renders with preserved whitespace (`<pre>`, or anything with `white-space: pre`, `pre-wrap`, `pre-line` or `break-spaces`) are skipped entirely, along with everything inside them, so their formatting isn't flattened. The check uses computed style, so the element must be attached to the document when you call `wrap()`.
 
 Letters are split the way a reader would see them, so emoji like 👍🏽 or 👨‍👩‍👧, flags, and letters with combining accents each stay together as one piece.
 
@@ -212,7 +212,8 @@ Splitting letters by what a reader sees, and the full `separatePunctuation` beha
 ## Known issues
 
 - In browsers without `Intl.Segmenter` (Firefox before 125), letters are split by Unicode code point instead, so emoji sequences like 👍🏽 and combining accents may be split apart. `separatePunctuation` only splits punctuation from the start and end of each space-separated word, so dashes between words (*a—b*) and punctuation in unspaced scripts like Chinese stay attached.
-- `unwrap()` can't restore whitespace that `wrap()` collapsed. This makes no visual difference unless the text is styled with something like `white-space: pre`.
+- `unwrap()` can't restore whitespace that `wrap()` collapsed. This makes no visual difference, as preformatted text is never collapsed in the first place.
+- Form feed (U+000C) is collapsed to a space, as in HTML, but CSS doesn't treat it as whitespace, so unwrapped it renders as a stray glyph.
 
 ## Development
 

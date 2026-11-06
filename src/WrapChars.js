@@ -244,6 +244,11 @@ class WrapChars
 
                 if(config.skipClass && node.classList.contains(config.skipClass)) break; // ignore this node
 
+                // Preformatted text (<pre>, white-space: pre-wrap, etc.): collapsing
+                // its whitespace would destroy the formatting. The property
+                // inherits, so skipping here covers the whole subtree.
+                if(WrapChars.#preservesWhitespace(node)) break;
+
                 // Iterate backwards: replacing a text node with several nodes
                 // shifts the indices of every following sibling.
                 const children = node.childNodes;
@@ -276,6 +281,28 @@ class WrapChars
         }
 
     }
+
+
+    /**
+     * #preservesWhitespace()
+     * Whether the browser renders this element's whitespace as written
+     * (pre, pre-wrap, pre-line, break-spaces) rather than collapsing it.
+     * Needs an element attached to the document: a detached one has no
+     * computed style, so it is treated as collapsing.
+     *
+     * @param {Element} element
+     * @returns {boolean}
+     */
+    static #preservesWhitespace(element)
+    {
+        const style = getComputedStyle(element);
+
+        // The white-space shorthand covers every browser for the common values;
+        // white-space-collapse catches combinations the shorthand can't express.
+        if (/^(pre|break-spaces)/.test(style.whiteSpace)) return true;
+        return Boolean(style.whiteSpaceCollapse) && style.whiteSpaceCollapse !== "collapse";
+    }
+
 
 
     /**

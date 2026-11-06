@@ -282,6 +282,24 @@ export const GROUPS = [
                     <p>Text after.</p>`,
             },
             {
+                id: "preformatted",
+                title: "Preformatted text",
+                note: "Anything the browser renders with preserved whitespace (<pre>, white-space: pre-wrap or pre-line) is left as it was, including nested elements such as <code>. Ordinary inline <code> is still wrapped.",
+                untouched: ".keep",
+                html: `<p>Wrapped text with <code>inline code</code> in it.</p>
+<pre class="keep">function  indented()
+{
+    return   "spacing is kept";
+}</pre>
+<pre class="keep"><code>nested   code
+    stays   put</code></pre>
+<div class="keep" style="white-space: pre-wrap">pre-wrap   keeps
+    spaces and breaks</div>
+<div class="keep" style="white-space: pre-line">pre-line   keeps
+    its line breaks</div>
+<p>Wrapped text after.</p>`,
+            },
+            {
                 id: "existing-markup",
                 title: "Existing attributes and elements",
                 note: "IDs, classes, titles and hrefs survive, and the link stays a single link.",

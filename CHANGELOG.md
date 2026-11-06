@@ -37,6 +37,7 @@ A big tidy-up: hardened, modernised, and made accessible. Versions 2.3 and 2.4 w
 - A bad option no longer leaves the element half-wrapped, as all options are validated first.
 - Empty elements are no longer created in certain combinations of markup with `wrapSpaces` and word mode.
 - `script`, `style`, `textarea`, `noscript` and `template` elements are never descended into.
+- Elements with preserved whitespace (`<pre>`, `white-space: pre`, `pre-wrap`, `pre-line`, `break-spaces`) are skipped, so their formatting is no longer collapsed.
 
 ## Upgrading from 2.x
 

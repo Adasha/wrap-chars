@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, onTestFinished } from "vitest";
 import { GROUPS } from "./testsuite-cases.js";
 import { DEFAULTS, PRESETS, runCase } from "./testsuite-lib.js";
 
@@ -24,7 +24,9 @@ describe("test suite cases", () =>
                 {
                     it(`${group.title}: ${testCase.title}`, () =>
                     {
-                        const sample = document.createElement("div");
+                        // Attached, so computed styles (white-space) apply as in a browser.
+                        const sample = document.body.appendChild(document.createElement("div"));
+                        onTestFinished(() => sample.remove());
                         const failures = runCase(sample, testCase, { ...DEFAULTS, ...preset })
                             .filter(result => !result.ok)
                             .map(result => `${result.name} (${result.detail})`);

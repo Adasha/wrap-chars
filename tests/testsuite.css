@@ -431,7 +431,9 @@ html
     font-size: 0.8125rem;
 }
 
-.checks:empty
+/* Hidden unless something failed: a 0px-tall list would still add a flex gap
+   to its card, so cards changed height when the checks were cleared. */
+.checks:not(:has(li[data-ok="false"]))
 {
     display: none;
 }
