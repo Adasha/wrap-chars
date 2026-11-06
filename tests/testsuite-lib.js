@@ -37,6 +37,17 @@ export const PRESETS = {
 const normalise = text => text.replace(/[ \t\n\f\r]+/g, " ").trim();
 
 
+/**
+ * The elements passed to WrapChars.wrap(). The same whatever the options, so
+ * that `deep` is what decides how much gets wrapped: each line of a `lines`
+ * case, or the sample itself for an `html` case.
+ */
+function wrapTargets(sample, testCase)
+{
+    return testCase.lines ? [...sample.querySelectorAll(":scope > .line")] : [sample];
+}
+
+
 /** Put a case's markup into `sample`, replacing whatever was there. */
 export function renderCase(sample, testCase)
 {
@@ -90,7 +101,8 @@ export function runCase(sample, testCase, params)
     const rootHTML = sample.innerHTML;
     const attributes = [...sample.querySelectorAll("*")].map(el => [el, el.cloneNode(false).outerHTML]);
 
-    WrapChars.wrap(sample, options);
+    const targets = wrapTargets(sample, testCase);
+    for (const target of targets) WrapChars.wrap(target, options);
 
     const wrapped = sample.innerHTML;
     const marked = [...sample.querySelectorAll("[data-wrapchars]")];
@@ -124,6 +136,13 @@ export function runCase(sample, testCase, params)
             untouched.length ? `${altered.length} of ${untouched.length} changed` : "selector matched nothing");
     }
 
+    if (options.deep === false)
+    {
+        const nested = marked.filter(el => !targets.includes(el.parentElement));
+        check("Only direct text wrapped (deep: false)", nested.length === 0,
+            `${nested.length} wrapper(s) inside nested elements`);
+    }
+
     const pieces = marked.filter(el => el.getAttribute("data-wrapchars") !== "text");
     const copies = marked.filter(el => el.getAttribute("data-wrapchars") === "text");
     if (options.accessible === false)
@@ -140,7 +159,7 @@ export function runCase(sample, testCase, params)
     }
 
     // Wrapping again must change nothing.
-    WrapChars.wrap(sample, options);
+    for (const target of targets) WrapChars.wrap(target, options);
     check("Wrapping twice is stable", sample.innerHTML === wrapped, "second wrap altered the output");
 
     // Unwrapping a copy must give back the text and leave no wrappers.

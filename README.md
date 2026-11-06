@@ -1,6 +1,6 @@
 # WrapChars.js
 
-v3.0.0
+v3.1.0
 
 ## Contents
 
@@ -231,6 +231,7 @@ The `tests` folder also contains some HTML pages for eyeballing the results, inc
 
 ## Version history
 
+- v3.1   - Preformatted text (`white-space: pre` etc.) is now skipped.
 - v3.0   - Modernised, hardened and made accessible. Breaking changes, see the [changelog](CHANGELOG.md).
 - v2.4   - Hardened codebase.
 - v2.3   - Added ES6 modular versions.

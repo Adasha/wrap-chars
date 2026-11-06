@@ -5,8 +5,10 @@
 //   id        unique slug, used for anchors
 //   title     short heading
 //   note      (optional) what the case is checking, or what to look for by eye
-//   html      markup placed inside the sample; or
-//   lines     an array of markup strings, each rendered as its own line
+//   html      markup placed inside the sample, which is passed to wrap(); or
+//   lines     an array of markup strings, each rendered as its own line and
+//             passed to wrap() separately (so `deep: false` leaves the
+//             elements inside each line alone)
 //   force     (optional) WrapChars options that override the control panel
 //   rootClass (optional) class added to the sample element itself; the whole
 //             sample must then come out unchanged
@@ -254,9 +256,7 @@ export const GROUPS = [
                 note: "The whole sample carries the skip class, so nothing is wrapped.",
                 force: { skipClass: "skip_me" },
                 rootClass: "skip_me",
-                lines: [
-                    "Nothing in here should be wrapped, <em>including this</em>.",
-                ],
+                html: "Nothing in here should be wrapped, <em>including this</em>.",
             },
             {
                 id: "shallow",

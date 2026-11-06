@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
 
+## [3.1.0] - 2026-11-06
+
+### Changed
+
+- Elements with preserved whitespace (`<pre>`, or anything with `white-space: pre`, `pre-wrap`, `pre-line` or `break-spaces`) are now skipped, along with everything inside them, so their formatting is no longer collapsed. This is decided from computed style, so the element must be attached to the document when `wrap()` is called.
+
 ## [3.0.0] - 2026-10-16
 
 A big tidy-up: hardened, modernised, and made accessible. Versions 2.3 and 2.4 were never published to npm, so their changes are included here.
@@ -37,7 +43,6 @@ A big tidy-up: hardened, modernised, and made accessible. Versions 2.3 and 2.4 w
 - A bad option no longer leaves the element half-wrapped, as all options are validated first.
 - Empty elements are no longer created in certain combinations of markup with `wrapSpaces` and word mode.
 - `script`, `style`, `textarea`, `noscript` and `template` elements are never descended into.
-- Elements with preserved whitespace (`<pre>`, `white-space: pre`, `pre-wrap`, `pre-line`, `break-spaces`) are skipped, so their formatting is no longer collapsed.
 
 ## Upgrading from 2.x
 
@@ -72,6 +77,7 @@ A big tidy-up: hardened, modernised, and made accessible. Versions 2.3 and 2.4 w
 
 - Original version.
 
+[3.1.0]: https://github.com/Adasha/wrap-chars/releases/tag/v3.1.0
 [3.0.0]: https://github.com/Adasha/wrap-chars/releases/tag/v3.0.0
 [2.4.0]: https://github.com/Adasha/wrap-chars
 [2.3.0]: https://github.com/Adasha/wrap-chars
