@@ -475,6 +475,6 @@ pre
 
 .show-pieces [data-wrapchars]:not([data-wrapchars="text"])
 {
-    outline: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    outline: 1px solid var(--accent);
     outline-offset: -1px;
 }
