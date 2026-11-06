@@ -224,13 +224,14 @@ npm install
 npm test            # run the test suite once
 npm run test:watch  # re-run tests as you edit
 npm run lint        # check code style
-npm run build       # build dist/wrap-chars.mjs and dist/wrap-chars.min.js
+npm run build       # build dist/ (ES module, classic script and type declarations)
 ```
 
 The `tests` folder also contains some HTML pages for eyeballing the results, including an interactive test suite with controls for every option. These import the source as a module, so need serving over HTTP rather than opening directly, e.g. with `npx serve` from the project folder.
 
 ## Version history
 
+- next   - Added TypeScript type declarations.
 - v3.1   - Preformatted text (`white-space: pre` etc.) is now skipped.
 - v3.0   - Modernised, hardened and made accessible. Breaking changes, see the [changelog](CHANGELOG.md).
 - v2.4   - Hardened codebase.

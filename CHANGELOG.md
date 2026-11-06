@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- TypeScript type declarations (`dist/wrap-chars.d.ts`), exposed through the `types` field and `exports`. Includes a `WrapOptions` interface for the `params` object.
+
 ## [3.1.0] - 2026-11-06
 
 ### Changed

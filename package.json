@@ -10,10 +10,14 @@
   },
   "license": "LGPL-3.0",
   "exports": {
-    ".": "./dist/wrap-chars.mjs",
+    ".": {
+      "types": "./dist/wrap-chars.d.ts",
+      "default": "./dist/wrap-chars.mjs"
+    },
     "./package.json": "./package.json"
   },
   "module": "./dist/wrap-chars.mjs",
+  "types": "./dist/wrap-chars.d.ts",
   "unpkg": "./dist/wrap-chars.min.js",
   "jsdelivr": "./dist/wrap-chars.min.js",
   "files": [

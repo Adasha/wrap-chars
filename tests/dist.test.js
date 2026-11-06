@@ -28,6 +28,17 @@ describe("dist", () =>
         expect(el.innerHTML).toBe('<span data-wrapchars="piece">a</span><span data-wrapchars="piece">b</span>');
     });
 
+    it("ships type declarations covering every option", () =>
+    {
+        const dts = readFileSync(join(root, "dist/wrap-chars.d.ts"), "utf8");
+        const src = readFileSync(join(root, "src/WrapChars.js"), "utf8");
+        const documented = [...src.matchAll(/@param \{[^}]+\} \[params\.(\w+)/g)].map(m => m[1]);
+
+        expect(documented.length).toBeGreaterThan(0);
+        for (const option of documented) expect(dts).toContain(`${option}?:`);
+        expect(dts).toContain("static unwrap(");
+    });
+
     it("wrap-chars.min.js defines a global WrapChars when run as a classic script", () =>
     {
         const code = readFileSync(join(root, "dist/wrap-chars.min.js"), "utf8");

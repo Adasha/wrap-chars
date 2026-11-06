@@ -1,5 +1,5 @@
 import { build } from "esbuild";
-import { readFile, rm } from "node:fs/promises";
+import { copyFile, readFile, rm } from "node:fs/promises";
 
 const entry = "src/WrapChars.js";
 const outdir = "dist";
@@ -43,4 +43,6 @@ await Promise.all([
     }),
 ]);
 
-console.log(`Built ${outdir}/wrap-chars.mjs and ${outdir}/wrap-chars.min.js`);
+await copyFile("src/wrap-chars.d.ts", `${outdir}/wrap-chars.d.ts`);
+
+console.log(`Built ${outdir}/wrap-chars.mjs, ${outdir}/wrap-chars.min.js and ${outdir}/wrap-chars.d.ts`);
